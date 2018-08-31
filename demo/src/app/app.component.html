@@ -1,0 +1,54 @@
+<p>F12查看具体内容</p>
+<div [formGroup]="form">
+  <div>
+    <label for="">require</label>
+    <input type="text" formControlName="name1">
+    <label for="">{{form.get('name1').valid}}</label>
+    <label for="">{{form.get('name1').errors|json}}</label>
+
+  </div>
+  <div>
+    <label for="">max(最大值是多少)</label>
+    <input type="text" formControlName="name2">
+    <label for="">{{form.get('name2').valid}}</label>
+    <label for="">{{form.get('name2').errors|json}}</label>
+
+  </div>
+  <div>
+    <label for="">max(最大长度是多少)</label>
+    <input type="text" formControlName="name3">
+    <label for="">{{form.get('name3').valid}}</label>
+    <label for="">{{form.get('name3').errors|json}}</label>
+
+  </div>
+  <div>
+    <label for="">requireTrue</label>
+    <input type="text" formControlName="name6">
+    <label for="">{{form.get('name6').valid}}</label>
+    <label for="">{{form.get('name6').errors|json}}</label>
+  </div>
+  <div>
+    <label for="">email</label>
+    <input type="text" formControlName="name7">
+    <label for="">{{form.get('name7').valid}}</label>
+    <label for="">{{form.get('name7').errors|json}}</label>
+  </div>
+  <div>
+    <label for="">pattern</label>
+    <input type="text" formControlName="name8">
+    <label for="">{{form.get('name8').valid}}</label>
+    <label for="">{{form.get('name8').errors|json}}</label>
+  </div>
+  <div>
+    <label for="">nullvalidator</label>
+    <input type="text" formControlName="name9">
+    <label for="">{{form.get('name9').valid}}</label>
+    <label for="">{{form.get('name9').errors|json}}</label>
+  </div>
+  <div>
+    <label for="">禁用</label>
+    <input type="text" formControlName="name10">
+    <label for="">{{form.get('name10').valid}}</label>
+    <label for="">{{form.get('name10').errors|json}}</label>
+  </div>
+</div>
