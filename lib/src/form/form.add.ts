@@ -1,5 +1,6 @@
 import { HttpRequestItem, CyiaHttpService, TypeJudgment, jsNativeType } from 'cyia-ngx-common';
-import { ModelViewPropertyConfig, componentType } from './form.define';
+import { ModelViewPropertyConfig, componentType, FormPropertyValueObj } from './form.define';
+import { _getConfig2Object } from './form.core';
 
 export function dataSourceFromReq(http: CyiaHttpService, httpRequestConfig: HttpRequestItem) {
     return http.request(httpRequestConfig).toPromise(this)
@@ -29,9 +30,10 @@ export function configValueInit(config: ModelViewPropertyConfig[], list) {
  * @param {ModelViewPropertyConfig[]} configArray
  * @param {*} valueObj
  */
-function mixinMVPArray(configArray: ModelViewPropertyConfig[], valueObj: any) {
+export function mixinMVPArray(configArray: ModelViewPropertyConfig[], valueObj: any) {
     console.log(configArray);
     configArray.map((val) => {
+        val.key = val.key || val.keyPath[val.keyPath.length - 1]
         switch (val.type) {
             case componentType.ARRAY:
                 val = mixinMVPArrayUseModel(val, valueObj)
@@ -41,7 +43,6 @@ function mixinMVPArray(configArray: ModelViewPropertyConfig[], valueObj: any) {
                 break;
             default:
                 console.log(val.token)
-                val.key = val.key || val.keyPath[val.keyPath.length - 1]
                 val.value = getValue(val.valuePath || val.keyPath, valueObj)
                 break;
         }
@@ -119,4 +120,10 @@ export function _newArray(array: Array<any>) {
             break;
     }
     return newArray;
+}
+
+
+/**将模型转化为可以被表单使用的值 */
+export function transform2FBConfig(config: ModelViewPropertyConfig[]): { [name: string]: FormPropertyValueObj } {
+    return _getConfig2Object(config)
 }

@@ -19,16 +19,24 @@ export class CyiaFormService {
     /**
      *传入对象类型,返回实例化表单
      *
+    
+     * @returns {FormGroup}
+     * @memberof CyiaFormService
+     */
+    /**
+     *
+     *
      * @param {*} object
      * @param {ValidatorFn[]} [validatorList=null] 对传入object进行验证器列表,验证对象是整个group
+     * @param {number} [type=1] 2为新的生成方式,{value:xx,disabled:xx,...}
      * @returns {FormGroup}
      * @memberof CyiaFormService
      */
     object2Form(object, validatorList: ValidatorFn[] = null, type: number = 1): FormGroup {
         if (type == 2) {
-            if (validatorList)
-                return this.fb.group(this._setValOBJ(object), { validator: validatorList })
-            return this.fb.group(this._setValOBJ(object))
+            // if (validatorList)
+            return this._setValOBJ(object)
+            // return this.fb.group(this._setValOBJ(object))
         }
         if (validatorList)
             return this.fb.group(this.setValOBJ(object), { validator: validatorList })
@@ -135,13 +143,14 @@ export class CyiaFormService {
         /**带验证器对对象,把原对象加上验证器 */
         let returnObject: Object = {};
         //doc 保证是一个对象
-        if (!(TypeJudgment.getType(object.value) == jsNativeType.object)) return;
+
+        if (!(TypeJudgment.getType(object.value) == jsNativeType.object) || (object.value.hasOwnProperty('disabled') && TypeJudgment.getType(object.value.disabled) == jsNativeType.bool)) return;
+        console.log('外部', object)
+        //doc 目前值在object.value中
         for (const name in object.value) {
-            //doc name字段名,val字段值
-            let val = object[name];
-            /**现在查找改为查找他的值了 */
+            if (!object.value.hasOwnProperty(name)) return;
+            let val = object.value[name];
             let type = TypeJudgment.getType(val.value);
-            if (!object.hasOwnProperty(name)) return;
             let validatorList = this._setValidators(val.validatorList)
             switch (type) {
                 case jsNativeType.object://doc 禁用不行,验证器可以
@@ -155,9 +164,10 @@ export class CyiaFormService {
                     break;
             }
         }
-        if (object.validatorList)
-            return this.fb.group(returnObject, { validator: object.validatorList });
-        return returnObject;
+        console.log(returnObject)
+        // if (object.validatorList)
+        return this.fb.group(returnObject, { validator: object.validatorList });
+        // return returnObject;
     }
     /**
     *
