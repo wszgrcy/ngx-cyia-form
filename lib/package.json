@@ -1,6 +1,6 @@
 {
   "name": "cyia-ngx-form",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "angular 6 对象转化表单模块",
   "main": "module/lib/index.js",
   "types": "module/lib/index.d.ts",

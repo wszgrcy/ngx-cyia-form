@@ -95,13 +95,20 @@ export interface ModelViewPropertyConfig {
   variety?: { [name: string]: ModelViewPropertyConfig }
   /**默认true使用 */
   use?: boolean;
+  /**子 */
+  children?: ModelViewPropertyConfig[] | ModelViewPropertyConfig | ModelViewPropertyConfig[][];
+
 }
 export type dataSourceFunction = (...param) => Promise<any>
 
+/**
+ * doc 组件类型
+ *
+ * @export
+ * @enum {number}
+ */
 export enum componentType {
-  INPUT, SELECT,
-
-
+  INPUT, SELECT_ONE, SELECT_MULTI, MARKDOWN, UPLOAD_ONE, UPLOAD_MULTI,
   ARRAY = 1000, OBJECT, VAR,
   UNDISPLAY = 9999
 }
