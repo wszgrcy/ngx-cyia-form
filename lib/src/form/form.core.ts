@@ -14,30 +14,27 @@ export function _getConfig2Object(config: ModelViewPropertyConfig[]) {
     for (let i = 0; i < config.length; i++) {
         const configItem = config[i];
         switch (configItem.type) {
-
             case componentType.ARRAY:
-                obj[configItem.key] = {
+                obj[configItem.key || configItem.keyPath[configItem.keyPath.length - 1]] = {
                     value: _getConfig2Array(configItem.children as any),
                     disabled: configItem.disabled,
                     validatorList: configItem.validatorList
                 }
                 break;
             case componentType.OBJECT:
-                obj[configItem.key] = {
+                obj[configItem.key || configItem.keyPath[configItem.keyPath.length - 1]] = {
                     value: _getConfig2Object(configItem.children as any),
                     disabled: configItem.disabled,
                     validatorList: configItem.validatorList
                 }
-                console.log(configItem.key)
                 break;
 
             default:
-                obj[configItem.key] = {
+                obj[configItem.key || configItem.keyPath[configItem.keyPath.length - 1]] = {
                     value: configItem.value,
                     disabled: configItem.disabled,
                     validatorList: configItem.validatorList
                 }
-
                 break;
         }
 

@@ -80,6 +80,7 @@ const testValidatorArray: validatorConfig[] = [
 # 更新日志
 ## 1.0.9
 - 增加了新的表单生成方式
+- 
 ## 1.0.8
 - 增加初始化值函数用于把值传入配置中
 # todo 

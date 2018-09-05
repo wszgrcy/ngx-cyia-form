@@ -60,12 +60,13 @@ export class AppComponent {
   copyobj() {
     /**配置的副本 */
     let configDuplicate: ModelViewPropertyConfig[] = _newArray(TEST_ARRAY);
-    let obj = mixinMVPArray(configDuplicate, {
-      name: '测试123',
-      t2: { name: '普通的一个对象' },
-      t3: [{ name: '数组第一个' }, { name: '数组第二个' }],
-      id: 1
-    })
+    // let obj = mixinMVPArray(configDuplicate, {
+    //   name: '测试123',
+    //   t2: { name: '普通的一个对象' },
+    //   t3: [{ name: '数组第一个' }, { name: '数组第二个' }],
+    //   id: 1
+    // })
+    let obj = configDuplicate
     console.log(configDuplicate)
     // let selobj = obj.find((value) => {
     //   return value.token == 'select'
@@ -121,7 +122,7 @@ const testValidatorArray: validatorConfig[] = [
 
 export const TEST_ARRAY: ModelViewPropertyConfig[] = [
   {
-    token: 'sel', keyPath: ['name'], valuePath: ['name'], value: 123, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.INPUT, placeholder: '缺省提示', dataSource: {
+    token: 'id', keyPath: ['id'], valuePath: ['id'], value: 123, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.UNDISPLAY, placeholder: '缺省提示', dataSource: {
       fn: dataSourceFromSelf,
       param: [],
       nextToken: '',
@@ -129,7 +130,7 @@ export const TEST_ARRAY: ModelViewPropertyConfig[] = [
     }, list: [], variety: null
   },
   {
-    token: 'select', keyPath: ['id'], valuePath: ['id'], value: null, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.INPUT, placeholder: '缺省提示', dataSource: {
+    token: 'label', keyPath: ['label'], valuePath: ['label'], value: null, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.INPUT, placeholder: '缺省提示', dataSource: {
       fn: dataSourceFromSelf,
       param: [],
       nextToken: '',
@@ -137,42 +138,23 @@ export const TEST_ARRAY: ModelViewPropertyConfig[] = [
     }, list: [], variety: null
   },
   {
-    token: 'sel2', keyPath: ['t2'], valuePath: ['t2'], disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.OBJECT, placeholder: '缺省提示', dataSource: {
+    token: 'description', keyPath: ['description'], valuePath: ['description'], value: null, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.INPUT, placeholder: '缺省提示', dataSource: {
       fn: dataSourceFromSelf,
       param: [],
       nextToken: '',
       delay: false
-    }, list: [], variety: null, children: [
-      {
-        token: 'sel21', keyPath: ['t2', 'name'], valuePath: ['t2', 'name'], value: 123, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.INPUT, placeholder: '缺省提示', dataSource: {
-          fn: dataSourceFromSelf,
-          param: [],
-          nextToken: '',
-          delay: false
-        }, list: [], variety: null
-      },
-    ]
+    }, list: [], variety: null
   },
   {
-    token: 'sel3', keyPath: ['t3'], valuePath: ['t3'], disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.ARRAY, placeholder: '缺省提示', dataSource: {
+    token: 'date', keyPath: ['date'], valuePath: ['date'], value: null, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.UNDISPLAY, placeholder: '缺省提示', dataSource: {
       fn: dataSourceFromSelf,
       param: [],
       nextToken: '',
       delay: false
-    }, list: [], variety: null, children: [
-      [{
-        token: 'sel31', keyPath: ['name'], valuePath: ['name'], value: 123, disabled: false, required: false, validatorList: null, label: '测试', sort: 1, type: componentType.INPUT, placeholder: '缺省提示', dataSource: {
-          fn: dataSourceFromSelf,
-          param: [],
-          nextToken: '',
-          delay: false
-        }, list: [], variety: null
-      }]
+    }, list: [], variety: null
+  },
 
-    ]
-  }
 ]
-
 
 
 function dataSourceFromSelf(value): Promise<any> {
