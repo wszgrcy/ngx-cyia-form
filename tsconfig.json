@@ -18,11 +18,12 @@
       "dom"
     ],
     "paths": {
-      "ngx-form": [
-        "lib/src/"
+      "lib": [
+        "dist/lib"
+      ],
+      "lib/*": [
+        "dist/lib/*"
       ]
     }
-
-  },
-
+  }
 }

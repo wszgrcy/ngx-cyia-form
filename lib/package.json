@@ -2,25 +2,14 @@
   "name": "cyia-ngx-form",
   "version": "1.0.10",
   "description": "angular 6 对象转化表单模块",
-  "main": "module/lib/index.js",
-  "types": "module/lib/index.d.ts",
-  "scripts": {
-    "prepublishOnly": "tsc"
-  },
-  "files": [
-    "module/lib/**/*.js",
-    "module/lib/**/*.d.ts",
-    "README.md",
-    "src/pic/*"
-  ],
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": ">=6.0.0",
-    "@angular/forms": ">=6.0.0",
-    "@angular/common": ">=6.0.0"
+    "@angular/forms": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
   },
   "dependencies": {
-    "cyia-ngx-common": ">=1.1.0"
+    "cyia-ngx-common": ">=1.1.6"
   },
   "author": {
     "name": "cyia",

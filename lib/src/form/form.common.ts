@@ -6,8 +6,8 @@ import { ValidatorType } from "./form.define";
  *
  *
  * @export
- * @param {string} validatorName 验证器名字
- * @param {...any[]} params value的参数
+ * @param  validatorName 验证器名字
+ * @param  params value的参数
  * @returns
  */
 export function getValidatorsType(validatorName: string, ...params: any[]): ValidatorType {

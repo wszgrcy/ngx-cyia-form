@@ -21,7 +21,6 @@ export interface CustomValidator {
  *
  * 某一字段的验证及验证名字
  * @export
- * @interface validatorItem
  */
 export interface validatorItem {
   name: BuiltInValidatorName | CustomValidatorName;
@@ -33,7 +32,6 @@ export interface validatorItem {
  *  验证项数组,供增加验证用
  *
  * @export
- * @interface validatorConfig
  */
 export interface validatorConfig {
   /**验证的字段名 */
@@ -105,7 +103,7 @@ export type dataSourceFunction = (...param) => Promise<any>
  * doc 组件类型
  *
  * @export
- * @enum {number}
+ * @enum 
  */
 export enum componentType {
   INPUT, SELECT_ONE, SELECT_MULTI, MARKDOWN, UPLOAD_ONE, UPLOAD_MULTI,

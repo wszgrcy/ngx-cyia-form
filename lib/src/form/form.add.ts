@@ -10,8 +10,8 @@ export function dataSourceFromReq(http: CyiaHttpService, httpRequestConfig: Http
  * 预定义返回自身值
  *
  * @export
- * @param {*} value
- * @returns {Promise<any>}
+ * @param  value
+ * @returns 
  */
 export function dataSourceFromSelf(value): Promise<any> {
     return new Promise((res) => {
@@ -27,8 +27,8 @@ export function configValueInit(config: ModelViewPropertyConfig[], list) {
 /**
  * 键值混合
  *
- * @param {ModelViewPropertyConfig[]} configArray
- * @param {*} valueObj
+ * @param  configArray
+ * @param  valueObj
  */
 export function mixinMVPArray(configArray: ModelViewPropertyConfig[], valueObj: any) {
     console.log(configArray);

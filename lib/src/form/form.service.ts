@@ -20,16 +20,16 @@ export class CyiaFormService {
      *传入对象类型,返回实例化表单
      *
     
-     * @returns {FormGroup}
+     * @returns 
      * @memberof CyiaFormService
      */
     /**
      *
      *
-     * @param {*} object
-     * @param {ValidatorFn[]} [validatorList=null] 对传入object进行验证器列表,验证对象是整个group
-     * @param {number} [type=1] 2为新的生成方式,{value:xx,disabled:xx,...}
-     * @returns {FormGroup}
+     * @param  object
+     * @param  [validatorList=null] 对传入object进行验证器列表,验证对象是整个group
+     * @param  [type=1] 2为新的生成方式,{value:xx,disabled:xx,...}
+     * @returns 
      * @memberof CyiaFormService
      */
     object2Form(object, validatorList: ValidatorFn[] = null, type: number = 1): FormGroup {
@@ -45,8 +45,8 @@ export class CyiaFormService {
     /**
      * 设置验证列表
      *
-     * @param {validatorConfig[]} validatorConfigList 验证列表
-     * @param {CustomValidator[]} [customValidator=null] 自定义函数列表
+     * @param  validatorConfigList 验证列表
+     * @param  [customValidator=null] 自定义函数列表
      * @memberof CyiaFormService
      */
     setValidatorList(validatorConfigList: validatorConfig[], customValidatorFunctionList: CustomValidator[] = null) {
@@ -56,8 +56,8 @@ export class CyiaFormService {
     /**
      *假设为对象,调用这个,
      *
-     * @param {Object} object
-     * @param {boolean} [addControl=false] 首次调用为false,其他应该为true
+     * @param  object
+     * @param  [addControl=false] 首次调用为false,其他应该为true
      * @returns
      * @memberof FormG
      */
@@ -96,8 +96,8 @@ export class CyiaFormService {
     /**
      * doc 数组
      * ! 当数组是formgroup/formcontrol之类时,应该直接加入
-     * @param {Array<any>} array 需要变成数组控件对数组
-     * @param {string} name 控件数组对名字
+     * @param  array 需要变成数组控件对数组
+     * @param  name 控件数组对名字
      * @memberof FormG
      */
     private setValArray(array: Array<any>, arrayValidAtorList: ValidatorFn[] = null): FormArray | any[] {
@@ -126,8 +126,8 @@ export class CyiaFormService {
     /**
      * *假设为对象,调用这个,
      * * 新版
-     * @param {Object} object
-     * @param {boolean} [addControl=false] 首次调用为false,其他应该为true
+     * @param  object
+     * @param  [addControl=false] 首次调用为false,其他应该为true
      * @returns
      * @memberof FormG
      */
@@ -172,9 +172,8 @@ export class CyiaFormService {
     /**
     *
     * * 新数组
-    * @private
-    * @param {{ value: any[],disabled?: boolean,validatorList?: validatorItem[]}} object
-    * @returns {(FormArray | any[])}
+    * @param  object
+    * @returns 
     * @memberof CyiaFormService
     */
     private _setValArray(
@@ -208,8 +207,8 @@ export class CyiaFormService {
     /**
   * doc 根据字段的名进行判断,满足验证器的条件
   * 
-  * @param {*} name 字段名
-  * @returns {ValidatorFn[]}
+  * @param  name 字段名
+  * @returns 
   * @memberof FormG
   */
     private _setValidators(validatorList: validatorItem[]): ValidatorFn[] {
@@ -245,8 +244,8 @@ export class CyiaFormService {
     /**
      * doc 根据字段的名进行判断,满足验证器的条件
      * 
-     * @param {*} name 字段名
-     * @returns {ValidatorFn[]}
+     * @param  name 字段名
+     * @returns 
      * @memberof FormG
      */
     private setValidators(validatorItem: validatorConfig): ValidatorFn[] {
@@ -283,9 +282,9 @@ export class CyiaFormService {
     /**
      * 获得禁用值,和验证器列表
      *
-     * @param {string} name 
-     * @param {*} [type=formPropertyType.direct] 验证类型
-     * @returns {[boolean, ValidatorFn[]]}
+     * @param  name 
+     * @param  [type=formPropertyType.direct] 验证类型
+     * @returns 
      * @memberof CyiaFormService
      */
     private getValidatorConfig(name: string, type = formPropertyType.direct): [boolean, ValidatorFn[]] {
