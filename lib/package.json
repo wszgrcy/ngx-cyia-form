@@ -1,6 +1,6 @@
 {
   "name": "cyia-ngx-form",
-  "version": "1.0.10",
+  "version": "1.1.1",
   "description": "angular 6 对象转化表单模块",
   "license": "MIT",
   "peerDependencies": {
@@ -14,6 +14,10 @@
   "author": {
     "name": "cyia",
     "email": "wszgrcy@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wszgrcy/ngx-cyia-form"
   },
   "keywords": [
     "angular",
