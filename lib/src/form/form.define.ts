@@ -79,13 +79,15 @@ export interface ModelViewPropertyConfig {
     /**字段显示的名字 */
     label?: string;
     /**
-     * @deprecated 将在未来5个版本后移除,使用order
+     * @deprecated 将在未来4个版本后移除,使用order
      * 字段显示的位置 */
     sort?: number;
     /**字段显示的位置 */
     order?: number;
     /**字段对应的组件 */
     type?: componentType;
+    /**控件的类型 */
+    controlType?: string;
     /**占位符 */
     placeholder?: string;
     /**数据来源:下拉等传入值和显示值不一致和选项选择需要 */
@@ -94,7 +96,10 @@ export interface ModelViewPropertyConfig {
         param?: any[],
         nextToken?: string;//todo 根据token值返回所需参数.然后进行请求
         delay?: boolean;//todo 是否是启动时获取.默认true
-        /**请求值的目标，当为both时返回格式需为['value','list'] */
+        /**请求值的目标，当为both时返回格式需为['value','list']
+         * result 返回复制
+         * param,下一个请求的参数(可选)
+         */
         target?: 'list' | 'value' | 'both';
     }
     //todo 1.直接显示自己.2.接口请求.3.其他方法请求
@@ -104,7 +109,7 @@ export interface ModelViewPropertyConfig {
     /**其他变种类型,用于混合 */
     variety?: { [name: string]: ModelViewPropertyConfig }
     /**
-     * @deprecated 将在未来5个版本后移除,使用status
+     * @deprecated 将在未来4个版本后移除,使用status
      * 默认true使用 */
     use?: boolean;
     /**可能有1.使用并且可以输入(正常操作),2.使用但是不能输入(disabled),3.看不见组件依靠其他赋值.4.直接在请求中没有此项  0b0000*/

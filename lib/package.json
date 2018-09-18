@@ -1,6 +1,6 @@
 {
   "name": "cyia-ngx-form",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "angular 6 对象转化表单模块",
   "license": "MIT",
   "peerDependencies": {

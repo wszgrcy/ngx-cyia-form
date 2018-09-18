@@ -78,6 +78,7 @@ const testValidatorArray: validatorConfig[] = [
 - 自定义验证器的value被认为是一个数组,哪怕是一个参数
 - 模块中已导出FormsModule和ReactiveModule
 # 更新日志
+
 ## 1.1.0
 - 更新编译方式
 ## 1.0.9
