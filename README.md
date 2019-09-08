@@ -78,7 +78,20 @@ const testValidatorArray: validatorConfig[] = [
 - 自定义验证器的value被认为是一个数组,哪怕是一个参数
 - 模块中已导出FormsModule和ReactiveModule
 # 更新日志
+## 2.0.0 beta1
+- 自定义表单控件
+- 单一控件开发中
+## 1.2.0
+- 更新为ng7编译
+## 1.1.4
+- 修正自定义验证器再生产模式下的问题..
 
+```ts
+[customValidator]
+=>
+[{name:'customValidator',fn:customValidator}]
+//在生产模式下函数名会被压缩...虽然也可以自己调编译配置.........
+```
 ## 1.1.0
 - 更新编译方式
 ## 1.0.9

@@ -1,0 +1,1 @@
+export type ReturnValue<T> = () => T;

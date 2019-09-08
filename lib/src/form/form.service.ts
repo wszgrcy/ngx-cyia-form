@@ -62,7 +62,7 @@ export class CyiaFormService {
      * @memberof FormG
      */
     private setValOBJ(object: Object, objValidatorList: ValidatorFn[] = null) {
-        !objValidatorList && console.log('参数obj', object);
+        // !objValidatorList && console.log('参数obj', object);
         /**带验证器对对象,把原对象加上验证器 */
         let returnObject: Object = {};
         //doc 保证是一个对象
@@ -145,13 +145,15 @@ export class CyiaFormService {
         //doc 保证是一个对象
 
         if (!(TypeJudgment.getType(object.value) == jsNativeType.object) || (object.value.hasOwnProperty('disabled') && TypeJudgment.getType(object.value.disabled) == jsNativeType.bool)) return;
-        console.log('外部', object)
         //doc 目前值在object.value中
         for (const name in object.value) {
             if (!object.value.hasOwnProperty(name)) return;
             let val = object.value[name];
+
             let type = TypeJudgment.getType(val.value);
-            let validatorList = this._setValidators(val.validatorList)
+
+            let validatorList = this._setValidators
+                (val.validatorList)
             switch (type) {
                 case jsNativeType.object://doc 禁用不行,验证器可以
                     Object.assign(returnObject, { [name]: this._setValOBJ(val) });
@@ -164,7 +166,6 @@ export class CyiaFormService {
                     break;
             }
         }
-        console.log(returnObject)
         // if (object.validatorList)
         return this.fb.group(returnObject, { validator: object.validatorList });
         // return returnObject;
@@ -224,15 +225,17 @@ export class CyiaFormService {
                 case ValidatorType.BuiltInWithParam:
                     validatorArray.push(Validators[validatorObj.name](validatorObj.value));
                     break;
+                //doc 以下为自定义的
                 case ValidatorType.CustomWithoutParam:
                     validatorArray.push(this.customValidatorFunctionList.find((val) => {
                         return val.name === validatorObj.name
-                    }))
+                    }).fn)
                     break;
                 case ValidatorType.CustomWithParam:
                     validatorArray.push(this.customValidatorFunctionList.find((val) => {
                         return val.name === validatorObj.name
-                    })(...validatorObj.value))
+                    }).fn(...validatorObj.value))
+
                     break;
                 default:
                     break;
@@ -264,12 +267,12 @@ export class CyiaFormService {
                 case ValidatorType.CustomWithoutParam:
                     validatorArray.push(this.customValidatorFunctionList.find((val) => {
                         return val.name === validatorObj.name
-                    }))
+                    }).fn)
                     break;
                 case ValidatorType.CustomWithParam:
                     validatorArray.push(this.customValidatorFunctionList.find((val) => {
                         return val.name === validatorObj.name
-                    })(...validatorObj.value))
+                    }).fn(...validatorObj.value))
                     break;
                 default:
                     break;

@@ -1,0 +1,99 @@
+<div *ngIf="cyiaFormControl" class="cyia-form-control">
+  <!-- 默认模式下显示的 -->
+  <label [for]="id" *ngIf="cyiaFormControl.label!==undefined&&cyiaFormControl.labelPosition=='default'"
+    class="mat-focused">
+    <span>
+      {{cyiaFormControl.label}}
+    </span>
+    <span class=" mat-placeholder-required mat-form-field-required-marker" *ngIf="cyiaFormControl.required"> *</span>
+  </label>
+  <ng-container *ngIf="cyiaFormControl.pattern=='w'">
+    <ng-container *ngIf="flag.formField">
+      <ng-container *ngTemplateOutlet="formField"></ng-container>
+    </ng-container>
+
+    <ng-template #formField>
+      <mat-form-field [class]="cyiaFormControl.class" [floatLabel]="flag.floatLabel"
+        [appearance]="cyiaFormControl.appearance">
+        <!-- 浮动 -->
+        <mat-label *ngIf="cyiaFormControl.labelPosition=='float'">{{cyiaFormControl.label}}</mat-label>
+        <span matPrefix *ngIf="cyiaFormControl.labelPosition=='inline'" class="label">{{cyiaFormControl.label}}</span>
+
+        <ng-container [ngSwitch]="cyiaFormControl.type">
+          <ng-container *ngSwitchCase="'input'">
+            <input (input)="limit($event)" matInput [placeholder]="cyiaFormControl.placeholder" [(ngModel)]="value"
+              [id]="id" [type]="cyiaFormControl.subType" [required]="flag.required"
+              [disabled]="cyiaFormControl.disabled">
+          </ng-container>
+          <ng-container *ngSwitchCase="'select'">
+            <mat-select [disabled]="cyiaFormControl.disabled" [placeholder]="cyiaFormControl.placeholder" [id]="id"
+              [(ngModel)]="value" [required]="flag.required">
+              <mat-option *ngFor="let option of options" [value]="option.value"
+                [disabled]="option.disabled||false">
+                {{option.label}}
+              </mat-option>
+            </mat-select>
+          </ng-container>
+          <ng-container *ngSwitchCase="'autocomplete'">
+            <input matInput [placeholder]="cyiaFormControl.placeholder" [(ngModel)]="value" [matAutocomplete]="auto"
+              [disabled]="cyiaFormControl.disabled">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of options" [value]="option.value">
+                {{option.label}}
+              </mat-option>
+            </mat-autocomplete>
+          </ng-container>
+
+        </ng-container>
+      </mat-form-field>
+    </ng-template>
+
+    <ng-container *ngIf="!flag.formField">
+      <mat-label *ngIf="cyiaFormControl.labelPosition=='float'">{{cyiaFormControl.label}}</mat-label>
+      <span matPrefix *ngIf="cyiaFormControl.labelPosition=='inline'" class="label">{{cyiaFormControl.label}}</span>
+
+      <ng-container [ngSwitch]="cyiaFormControl.type">
+        <ng-container *ngSwitchCase="'checkbox'">
+          <mat-checkbox [(ngModel)]="value" [required]="flag.required" [disabled]="cyiaFormControl.disabled">
+          </mat-checkbox>
+        </ng-container>
+        <ng-container *ngSwitchCase="'checkbox-multi'">
+          <!-- <mat-checkbox [(ngModel)]="value" [required]="flag.required" [disabled]="cyiaFormControl.disabled">
+          </mat-checkbox> -->
+        </ng-container>
+        <ng-container *ngSwitchCase="'radio'">
+          <mat-radio-group [(ngModel)]="value" [disabled]="cyiaFormControl.disabled">
+            <mat-radio-button *ngFor="let option of options" [value]="option.value"
+              [disabled]="option.disabled||false">
+              {{option.label}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </ng-container>
+        <ng-container *ngSwitchCase="'slider'">
+          <mat-slider [disabled]="cyiaFormControl.disabled" [(ngModel)]="value">
+          </mat-slider>
+        </ng-container>
+        <ng-container *ngSwitchCase="'slide-toggle'">
+          <mat-slide-toggle [(ngModel)]="value" [disabled]="cyiaFormControl.disabled">
+
+          </mat-slide-toggle>
+        </ng-container>
+      </ng-container>
+
+    </ng-container>
+
+  </ng-container>
+  <ng-container *ngIf="cyiaFormControl.pattern=='r'">
+    <div class="read mat-form-field-appearance-{{cyiaFormControl.appearance}} ">
+      <div class="mat-form-field-wrapper">
+        <div class="mat-form-field-flex">
+          <span class="mat-form-field-infix ">
+            {{readValue}}
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+
+</div>

@@ -1,0 +1,76 @@
+:host {
+  display: inline-block;
+
+  .cyia-form-control {
+    display: flex;
+    // align-items: center;
+    align-items: baseline;
+
+  }
+
+  font-size: inherit;
+  line-height: 1.125;
+
+  //doc 和官网同步
+  mat-form-field {
+
+    font-size: inherit;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", sans-serif
+  }
+
+  &.label-position-default {
+
+    //doc 默认下调整样式
+    &>.cyia-form-control>label {
+      padding-bottom: 1.25em;
+      padding-right: 0.5em;
+    }
+
+    //doc 默认模式下,取消浮动和上面的高度
+    ::ng-deep .mat-form-field-infix {
+      border: 0;
+    }
+
+    .read {
+      //doc 只读时的位置与写入保持一致
+      // padding: .4375em 0 .4375em+1.25em 0;
+    }
+
+    ::ng-deep .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
+      transform: translateY(0%)
+    }
+  }
+
+  &.label-position-float,
+  &.label-position-inline,
+  &.label-position-none {
+    .read {
+      //doc 只读时的位置与写入保持一致
+      // padding: .4375em+.84375em 0 .4375em+1.25em 0;
+    }
+  }
+
+  &.label-position-inline {
+    .label {
+      //doc 内联标签右侧间距
+      padding-right: 0.5em;
+    }
+  }
+
+  &.slider,
+  &.slide-toggle,
+  &.radio {
+    .cyia-form-control {
+      align-items: center;
+
+      &>label {
+        padding-bottom: 0;
+      }
+
+      // &>mat-slider {
+      //   align-self: center;
+      // }
+    }
+  }
+}

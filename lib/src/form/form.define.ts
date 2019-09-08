@@ -13,7 +13,9 @@ export enum ValidatorType {
 }
 //用于设置自定义数组
 export interface CustomValidator {
-    (...param): ValidatorFn
+    name: string;
+    fn: (...param) => ValidatorFn
+    // (...param): 
 }
 
 
@@ -127,7 +129,7 @@ export type dataSourceFunction = (...param) => Promise<any>
  * @enum 
  */
 export enum componentType {
-    INPUT, SELECT_ONE, SELECT_MULTI, MARKDOWN, UPLOAD_ONE, UPLOAD_MULTI,
+    INPUT, SELECT_ONE, SELECT_MULTI, MARKDOWN, UPLOAD_ONE, UPLOAD_MULTI, TIME,
     ARRAY = 1000, OBJECT, VAR,
     UNDISPLAY = 9999
 }

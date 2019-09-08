@@ -18,12 +18,13 @@
       "dom"
     ],
     "paths": {
-      "lib": [
-        "dist/lib"
-      ],
-      "lib/*": [
-        "dist/lib/*"
+      "cyia-ngx-form": [
+        // "dist/lib"
+        "./lib/src"
       ]
+      // "lib/*": [
+      //   "dist/lib/*"
+      // ]
     }
   }
 }
