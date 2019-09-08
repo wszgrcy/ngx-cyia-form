@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CyiaFormControl, Pattern, FormControlType } from 'cyia-ngx-form';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { CyiaFormControl, Pattern, FormControlType, CyiaFormGroup } from 'cyia-ngx-form';
 // import { FormControlType } from 'lib/src/enum/control-type.enum';
 
 @Component({
@@ -8,6 +8,7 @@ import { CyiaFormControl, Pattern, FormControlType } from 'cyia-ngx-form';
   styleUrls: ['./test-form.component.scss']
 })
 export class TestFormComponent implements OnInit {
+  @ViewChild('optTemplate', { static: true }) optTemplate: TemplateRef<any>
   control: CyiaFormControl
   c2: CyiaFormControl
   c3: CyiaFormControl
@@ -15,7 +16,10 @@ export class TestFormComponent implements OnInit {
   c5: CyiaFormControl
   c6: CyiaFormControl
   c7: CyiaFormControl
-  constructor() { }
+  g1 = new CyiaFormGroup()
+  constructor() {
+
+  }
 
   ngOnInit() {
     this.control = new CyiaFormControl({
@@ -90,29 +94,33 @@ export class TestFormComponent implements OnInit {
       // disabled: true,
       // value: 1,
     })
-    this.c7 = new CyiaFormControl({
-      type: FormControlType.autocomplete,
-      pattern: Pattern.w,
-      label: '自动补全',
-      labelPosition: 'default',
-      appearance: 'fill',
-      required: true,
-      // disabled: true,
-      value: 1,
-      options: async () => [
-        { label: '测试1', value: 1 },
-        { label: '测试2', value: 2, disabled: true, default: true },
-      ],
-      filterPipe: async (th, value) => {
-        return th.options(th).then((res) => res.filter((item) => `${item.value}`.includes(value)))
-      }
-    })
+
+    this.g1.controls.push(this.control)
 
 
-    // this.control.disabled = true
+  }
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.c7 = new CyiaFormControl({
+        type: FormControlType.autocomplete,
+        pattern: Pattern.w,
+        label: '自动补全',
+        labelPosition: 'default',
+        appearance: 'fill',
+        required: true,
+        // disabled: true,
+        value: 1,
+        options: async () => [
+          { label: '测试1', value: 1 },
+          { label: '测试2', value: 2, disabled: true, default: true },
+        ],
+        optionTemplate: this.optTemplate,
+        filterPipe: async (th, value) => {
+          return th.options(th).then((res) => res.filter((item) => `${item.value}`.includes(value)))
+        }
+      })
 
-    // this.control.hidden = true
-
+    }, 0);
   }
 
 }

@@ -55,35 +55,38 @@ export class _CyiaFormControl<T = any>{
     subType?: string
     @ChangeEmit()
     pattern?: Pattern = Pattern.r
-    /**不同样式 */
+    /**不同样式?,加载哪个样式上待商定,暂时不实现 */
     @ChangeEmit()
     style?: Object
     @ChangeEmit()
+    /**类,加载在控件上 */
     class?: string = ''
     /**除了label外,还应该有其他的.比如是不是必须
      * 是不是:
      * 后缀template
      * 前缀template
      */
-    @ChangeEmit()
-    display?: boolean = true
-    /**验证器 */
+    // /**与隐藏冲突,废弃 */
+    // @ChangeEmit()
+    // display?: boolean = true
+    /**验证器,外部实现 */
     @ChangeEmit()
     validator?: ValidatorFn[]
-    /**限制输入 */
+    /**限制输入,input */
     // @ChangeEmit()
     limit?: (arg0: this, now, value) => boolean;
-
+    /**md特性 */
     appearance?: MatFormFieldAppearance = 'legacy'
     /**select.radio,slider,slidetoggle,autocomplete,控件内 */
-    options?: (arg0:this) => Promise<CyiaOption<T>[]> = async () => []
+    options?: (arg0: this) => Promise<CyiaOption<T>[]> = async () => []
     /**自定义选项的模板,控件内 */
     optionTemplate?: TemplateRef<any>
-    /**输入值,输出值管道转化,控件内 */
+    /**输入值管道转化,控件内 */
     inputPipe?: (arg0: this, value) => any
+    /**输出值管道转化,控件内 */
     outputPipe?: (arg0: this, value) => any
     /**autocomplete使用 */
-    filterPipe?: (arg0: this, value) =>Promise<CyiaOption<T>[]> 
+    filterPipe?: (arg0: this, value) => Promise<CyiaOption<T>[]>
 }
 export class CyiaFormControl<T = any> extends _CyiaFormControl {
     change$: Subject<CyiaFormControlChange>
@@ -110,10 +113,11 @@ export class CyiaFormControl<T = any> extends _CyiaFormControl {
     }
 }
 export class CyiaFormGroup {
-    key: string
-    controls: { [name: string]: CyiaFormControl | CyiaFormGroup | CyiaFormArray }
+    key: string = ''
+    controls: (CyiaFormControl | CyiaFormGroup | CyiaFormArray)[] = []
 }
 export class CyiaFormArray {
+    key: string = ''
     list: (CyiaFormControl | CyiaFormGroup | CyiaFormArray)[]
 }
 export enum Pattern {

@@ -1,3 +1,13 @@
+<ng-template #optionsTemplate let-option>
+  <ng-container *ngIf="!cyiaFormControl.optionTemplate">
+    {{option.label}}
+  </ng-container>
+  <ng-container *ngIf="cyiaFormControl.optionTemplate">
+    <ng-container *ngTemplateOutlet="cyiaFormControl.optionTemplate;context:{$implicit:option}">
+    </ng-container>
+  </ng-container>
+</ng-template>
+
 <div *ngIf="cyiaFormControl" class="cyia-form-control">
   <!-- 默认模式下显示的 -->
   <label [for]="id" *ngIf="cyiaFormControl.label!==undefined&&cyiaFormControl.labelPosition=='default'"
@@ -28,9 +38,8 @@
           <ng-container *ngSwitchCase="'select'">
             <mat-select [disabled]="cyiaFormControl.disabled" [placeholder]="cyiaFormControl.placeholder" [id]="id"
               [(ngModel)]="value" [required]="flag.required">
-              <mat-option *ngFor="let option of options" [value]="option.value"
-                [disabled]="option.disabled||false">
-                {{option.label}}
+              <mat-option [value]="option.value" [disabled]="option.disabled||false" *ngFor="let option of options||[]">
+                <ng-container *ngTemplateOutlet="optionsTemplate;context:{$implicit:option}"></ng-container>
               </mat-option>
             </mat-select>
           </ng-container>
@@ -38,8 +47,8 @@
             <input matInput [placeholder]="cyiaFormControl.placeholder" [(ngModel)]="value" [matAutocomplete]="auto"
               [disabled]="cyiaFormControl.disabled">
             <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of options" [value]="option.value">
-                {{option.label}}
+              <mat-option [value]="option.value" [disabled]="option.disabled||false" *ngFor="let option of options||[]">
+                <ng-container *ngTemplateOutlet="optionsTemplate;context:{$implicit:option}"></ng-container>
               </mat-option>
             </mat-autocomplete>
           </ng-container>
@@ -63,8 +72,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'radio'">
           <mat-radio-group [(ngModel)]="value" [disabled]="cyiaFormControl.disabled">
-            <mat-radio-button *ngFor="let option of options" [value]="option.value"
-              [disabled]="option.disabled||false">
+            <mat-radio-button *ngFor="let option of options" [value]="option.value" [disabled]="option.disabled||false">
               {{option.label}}
             </mat-radio-button>
           </mat-radio-group>

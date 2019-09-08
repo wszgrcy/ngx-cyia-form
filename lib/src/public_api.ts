@@ -8,3 +8,4 @@ export * from "./form/form.add";
 export * from './component/cyia-form-control/cyia-form-control.module'
 export * from './form/cyia-form.class'
 export * from './enum/control-type.enum'
+export * from './component/cyia-form-group/cyia-form-group.module'

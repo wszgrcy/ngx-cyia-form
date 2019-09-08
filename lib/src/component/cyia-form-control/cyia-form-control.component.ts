@@ -17,7 +17,8 @@ import { CyiaOption } from '../../type/options.type';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': `cyiaFormControl&&(
-      'label-position-'+cyiaFormControl.labelPosition+ ' '+cyiaFormControl.type
+      'label-position-'+cyiaFormControl.labelPosition+ ' '+cyiaFormControl.type+
+      ' '+cyiaFormControl.class 
       )`,
     '[style.display]': `cyiaFormControl&&cyiaFormControl.hidden?'none':'' `
 
@@ -57,6 +58,7 @@ export class CyiaFormControlComponent implements OnInit {
    * fill outline不能用 inline标签,显示不正常
    */
   @Input() set cyiaFormControl(value) {
+    if (!value) return
     this.cyiaFormControlInput(value)
     //doc 取消上一次订阅
     this._cyiaFormControl && this._cyiaFormControl.change$.unsubscribe()

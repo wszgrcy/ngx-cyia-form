@@ -1,3 +1,17 @@
-<p>
-  cyia-form-group works!
-</p>
+<div [formGroup]="formGroup" *ngIf="cyiaFormGroup&&formGroup">
+  <ng-container *ngFor="let control of cyiaFormGroup.controls">
+    <ng-container [ngSwitch]="getFormType(control)">
+      <ng-container *ngSwitchCase="'array'">
+
+      </ng-container>
+      <ng-container *ngSwitchCase="'control'">
+        <cyia-form-control [cyiaFormControl]="control"  [formControlName]="control.key"></cyia-form-control>
+      </ng-container>
+      <ng-container *ngSwitchCase="'array'">
+
+      </ng-container>
+
+    </ng-container>
+  </ng-container>
+
+</div>

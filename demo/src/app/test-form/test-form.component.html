@@ -5,3 +5,7 @@
 <cyia-form-control [cyiaFormControl]="c5"></cyia-form-control>
 <cyia-form-control [cyiaFormControl]="c6"></cyia-form-control>
 <cyia-form-control [cyiaFormControl]="c7"></cyia-form-control>
+<ng-template #optTemplate let-option>
+    {{option.label}}{{option.value}}123
+</ng-template>
+<cyia-form-group [cyiaFormGroup]="g1"></cyia-form-group>

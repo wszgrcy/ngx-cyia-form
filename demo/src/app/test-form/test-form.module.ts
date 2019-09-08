@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TestFormComponent } from './test-form.component';
-import { CyiaFormControlModule } from 'cyia-ngx-form';
+import { CyiaFormControlModule, CyiaFormGroupModule } from 'cyia-ngx-form';
 
 @NgModule({
   imports: [
     CommonModule,
-    CyiaFormControlModule
+    CyiaFormControlModule,
+    CyiaFormGroupModule
   ],
   declarations: [TestFormComponent],
   exports: [TestFormComponent]
