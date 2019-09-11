@@ -11,9 +11,10 @@ import { ChangeSubscribe } from '../decorator/change-subscribe.decorator'
 import { MatFormFieldAppearance } from '@angular/material/form-field'
 import { TemplateRef } from '@angular/core';
 import { CyiaOption } from '../type/options.type';
+import { LayoutStyle } from '../type/form-group.type';
 // @ListenClass()
 export class _CyiaFormControl<T = any>{
-    key?: string = ''
+    key?: string = `${Math.random()}`
     /**值变化,控件内 */
     @ChangeEmit()
     value?: T
@@ -113,13 +114,15 @@ export class CyiaFormControl<T = any> extends _CyiaFormControl {
     }
 }
 export class CyiaFormGroup {
-    key: string = ''
-    controls: (CyiaFormControl | CyiaFormGroup | CyiaFormArray)[] = []
+    key?: string = `${Math.random()}`
+    controls?: (CyiaFormControl | CyiaFormGroup)[] = []
+    layoutStyle?: LayoutStyle = LayoutStyle.cssGrid
+    gridTemplateAreas?: number[][]=[[]]
 }
-export class CyiaFormArray {
-    key: string = ''
-    list: (CyiaFormControl | CyiaFormGroup | CyiaFormArray)[]
-}
+// export class CyiaFormArray {
+//     key: string = ''
+//     list: (CyiaFormControl | CyiaFormGroup | CyiaFormArray)[]
+// }
 export enum Pattern {
     w = 'w', r = 'r'
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy, SimpleChanges, Renderer2, ViewChild, ViewContainerRef, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { CyiaFormGroup, CyiaFormControl, CyiaFormArray } from '../../form/cyia-form.class';
+import { CyiaFormGroup, CyiaFormControl } from '../../form/cyia-form.class';
+import { LayoutStyle } from 'lib/src/type/form-group.type';
 
 @Component({
   selector: 'cyia-form-group',
@@ -12,32 +13,46 @@ import { CyiaFormGroup, CyiaFormControl, CyiaFormArray } from '../../form/cyia-f
     multi: true
   }],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'cyiaFormGroup&&cyiaFormGroup.layoutStyle'
+  }
 })
 export class CyiaFormGroupComponent implements ControlValueAccessor {
-  formGroup: FormGroup
   @Input() cyiaFormGroup: CyiaFormGroup
+  @ViewChildren('controlEl', { read: ElementRef }) controlList: QueryList<ElementRef>
+  @ViewChild('wrapper', { static: false }) set wrapper(val: ElementRef<HTMLDivElement>) {
+    this.setLayout(val)
+  }
+  formGroup: FormGroup
   private changeFn: Function = () => { };
   private touchedFn: Function = () => { };
   value
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private renderer: Renderer2
+  ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
     if (changes.cyiaFormGroup) {
       let formGroup = new FormGroup({})
-      console.log(this.cyiaFormGroup)
       this.cyiaFormGroup.controls.forEach((item) => {
         if (item instanceof CyiaFormGroup) {
+          formGroup.addControl(item.key, this.fb.control(undefined))
         } else if (item instanceof CyiaFormControl) {
           formGroup.addControl(item.key, this.fb.control(item.value, item.validator))
-        } else if (item instanceof CyiaFormArray) {
         }
-
+        // else if (item instanceof CyiaFormArray) {
+        //   formGroup.addControl(item.key, this.fb.control(undefined))
+        // }
       })
       this.formGroup = formGroup
+      this.valueChangeListener()
     }
 
   }
   ngOnInit() {
+    setTimeout(() => {
+      console.log(this.formGroup)
+    }, 3000);
   }
   registerOnChange(fn) {
     this.changeFn = fn;
@@ -61,8 +76,27 @@ export class CyiaFormGroupComponent implements ControlValueAccessor {
       return 'group'
     } else if (control instanceof CyiaFormControl) {
       return 'control'
-    } else if (control instanceof CyiaFormArray) {
-      return 'array'
+    }
+    // else if (control instanceof CyiaFormArray) {
+    //   return 'array'
+    // }
+  }
+  valueChangeListener() {
+    this.formGroup.valueChanges.subscribe((val) => {
+      console.log(val)
+      this.valueChange(val)
+    })
+  }
+  setLayout(wrapper: ElementRef<HTMLDivElement>) {
+    switch (this.cyiaFormGroup.layoutStyle) {
+      case LayoutStyle.cssGrid:
+        this.renderer.setStyle(wrapper.nativeElement, 'grid-template-areas', this.cyiaFormGroup.gridTemplateAreas.map((items) => `'${items.map((item) => item ? `a${item}` : '.').join(' ')}'`).join(' '))
+        this.renderer.setStyle(wrapper.nativeElement, 'grid-template-columns', `repeat(${this.cyiaFormGroup.gridTemplateAreas[0].length}, 1fr)`)
+        this.controlList.forEach((item, i) => this.renderer.setStyle(item.nativeElement, 'grid-area', `a${i + 1}`))
+        break;
+
+      default:
+        break;
     }
   }
 }

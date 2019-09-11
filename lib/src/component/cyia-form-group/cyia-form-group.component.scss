@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  width: 100%;
+
+  &.css-grid>.group__wrapper {
+    display: grid;
+    justify-items: start;
+    // grid-auto-rows: 1fr;
+    // grid-template-columns: repeat(24, 1fr);
+
+    &>* {
+      // grid-column-start: span 4;
+      // grid-row-start: span 2;
+    }
+  }
+
+}

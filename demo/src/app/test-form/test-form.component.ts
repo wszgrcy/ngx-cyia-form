@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { CyiaFormControl, Pattern, FormControlType, CyiaFormGroup } from 'cyia-ngx-form';
+import { Validators } from '@angular/forms';
 // import { FormControlType } from 'lib/src/enum/control-type.enum';
 
 @Component({
@@ -29,6 +30,7 @@ export class TestFormComponent implements OnInit {
       labelPosition: 'default',
       appearance: 'fill',
       pattern: Pattern.w,
+      validator: [Validators.required],
       limit: (control, data, value) => {
         if (value && value.length > 10) {
           return true
@@ -95,7 +97,28 @@ export class TestFormComponent implements OnInit {
       // value: 1,
     })
 
-    this.g1.controls.push(this.control)
+    this.g1.controls.push(this.c2)
+    this.g1.controls.push(this.c2)
+    this.g1.controls.push(this.c2)
+    this.g1.controls.push(this.c2)
+    this.g1.controls.push(this.c2)
+    this.g1.controls.push(this.c2)
+    this.g1.controls.push(this.c2)
+    let g2 = new CyiaFormGroup()
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.controls.push(this.control)
+    g2.gridTemplateAreas = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 0, 0, 0]]
+    this.g1.controls.push(g2)
+
+    this.g1.gridTemplateAreas = [[1, 1, 2, 3, 4], [5, 6, 7, 0, 0], [8, 8, 8, 8, 8]]
+
 
 
   }

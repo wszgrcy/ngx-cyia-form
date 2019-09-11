@@ -1,17 +1,30 @@
-<div [formGroup]="formGroup" *ngIf="cyiaFormGroup&&formGroup">
+<div [formGroup]="formGroup" *ngIf="cyiaFormGroup&&formGroup" class="group__wrapper" #wrapper>
   <ng-container *ngFor="let control of cyiaFormGroup.controls">
     <ng-container [ngSwitch]="getFormType(control)">
-      <ng-container *ngSwitchCase="'array'">
-
+      <ng-container *ngSwitchCase="'group'">
+        <cyia-form-group [formControlName]="control.key" [cyiaFormGroup]="control" #controlEl></cyia-form-group>
       </ng-container>
       <ng-container *ngSwitchCase="'control'">
-        <cyia-form-control [cyiaFormControl]="control"  [formControlName]="control.key"></cyia-form-control>
+        <cyia-form-control [cyiaFormControl]="control" [formControlName]="control.key" #controlEl></cyia-form-control>
       </ng-container>
-      <ng-container *ngSwitchCase="'array'">
-
-      </ng-container>
+      <!-- <ng-container *ngSwitchCase="'array'">
+      </ng-container> -->
 
     </ng-container>
   </ng-container>
 
 </div>
+<!-- <ng-template #formGroupTemplate>
+</ng-template> -->
+
+<!-- <div [ngSwitch]="cyiaFormGroup?.layoutStyle">
+  <p *ngSwitchCase="'css-grid'">
+
+  </p>
+  <p *ngSwitchCase="false">
+
+  </p>
+  <p *ngSwitchDefault>
+
+  </p>
+</div> -->
