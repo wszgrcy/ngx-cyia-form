@@ -31,21 +31,20 @@
 
         <ng-container [ngSwitch]="cyiaFormControl.type">
           <ng-container *ngSwitchCase="'input'">
-            <input (input)="limit($event)" matInput [placeholder]="cyiaFormControl.placeholder" [(ngModel)]="value"
-              [id]="id" [type]="cyiaFormControl.subType" [required]="flag.required"
-              [disabled]="cyiaFormControl.disabled">
+            <input matInput [placeholder]="cyiaFormControl.placeholder" [id]="id" [type]="cyiaFormControl.subType"
+              [required]="flag.required" [formControl]="formControl">
           </ng-container>
           <ng-container *ngSwitchCase="'select'">
-            <mat-select [disabled]="cyiaFormControl.disabled" [placeholder]="cyiaFormControl.placeholder" [id]="id"
-              [(ngModel)]="value" [required]="flag.required">
+            <mat-select [placeholder]="cyiaFormControl.placeholder" [id]="id" [required]="flag.required"
+              [formControl]="formControl">
               <mat-option [value]="option.value" [disabled]="option.disabled||false" *ngFor="let option of options||[]">
                 <ng-container *ngTemplateOutlet="optionsTemplate;context:{$implicit:option}"></ng-container>
               </mat-option>
             </mat-select>
           </ng-container>
           <ng-container *ngSwitchCase="'autocomplete'">
-            <input matInput [placeholder]="cyiaFormControl.placeholder" [(ngModel)]="value" [matAutocomplete]="auto"
-              [disabled]="cyiaFormControl.disabled">
+            <input matInput [placeholder]="cyiaFormControl.placeholder" [matAutocomplete]="auto"
+              [formControl]="formControl">
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option [value]="option.value" [disabled]="option.disabled||false" *ngFor="let option of options||[]">
                 <ng-container *ngTemplateOutlet="optionsTemplate;context:{$implicit:option}"></ng-container>
@@ -54,6 +53,7 @@
           </ng-container>
 
         </ng-container>
+        <mat-error *ngIf="nowError&&cyiaFormControl.displayError">{{nowError}}</mat-error>
       </mat-form-field>
     </ng-template>
 
@@ -63,7 +63,7 @@
 
       <ng-container [ngSwitch]="cyiaFormControl.type">
         <ng-container *ngSwitchCase="'checkbox'">
-          <mat-checkbox [(ngModel)]="value" [required]="flag.required" [disabled]="cyiaFormControl.disabled">
+          <mat-checkbox [formControl]="formControl" [required]="flag.required">
           </mat-checkbox>
         </ng-container>
         <ng-container *ngSwitchCase="'checkbox-multi'">
@@ -71,18 +71,18 @@
           </mat-checkbox> -->
         </ng-container>
         <ng-container *ngSwitchCase="'radio'">
-          <mat-radio-group [(ngModel)]="value" [disabled]="cyiaFormControl.disabled">
+          <mat-radio-group [formControl]="formControl">
             <mat-radio-button *ngFor="let option of options" [value]="option.value" [disabled]="option.disabled||false">
               {{option.label}}
             </mat-radio-button>
           </mat-radio-group>
         </ng-container>
         <ng-container *ngSwitchCase="'slider'">
-          <mat-slider [disabled]="cyiaFormControl.disabled" [(ngModel)]="value">
+          <mat-slider [formControl]="formControl">
           </mat-slider>
         </ng-container>
         <ng-container *ngSwitchCase="'slide-toggle'">
-          <mat-slide-toggle [(ngModel)]="value" [disabled]="cyiaFormControl.disabled">
+          <mat-slide-toggle [formControl]="formControl">
 
           </mat-slide-toggle>
         </ng-container>

@@ -24,29 +24,33 @@ export class TestFormComponent implements OnInit {
 
   ngOnInit() {
     this.control = new CyiaFormControl({
-      value: '输入值',
-      label: '测试',
-      placeholder: '占位符',
+      value: '测试输入值',
+      // value: ,
+      label: '输入',
+      placeholder: '输入占位符',
       labelPosition: 'default',
       appearance: 'fill',
       pattern: Pattern.w,
-      validator: [Validators.required],
-      limit: (control, data, value) => {
-        if (value && value.length > 10) {
-          return true
-        }
-        return false
-      }
+      validator: [Validators.required, Validators.maxLength(10), Validators.minLength(5),
+      Validators.email, Validators.pattern(/a/),
+      Validators.requiredTrue
+      ],
+      // limit: (control, data, value) => {
+      //   if (value && value.length > 10) {
+      //     return true
+      //   }
+      //   return false
+      // }
     })
 
     this.c2 = new CyiaFormControl({
       type: FormControlType.select,
-      pattern: Pattern.w,
+      pattern: Pattern.r,
       label: '选项',
       labelPosition: 'default',
       appearance: 'fill',
       required: true,
-      // disabled:true,
+      disabled: true,
       placeholder: '选项占位符',
       options: async () => [
         { label: '测试1', value: 1, default: true },
@@ -98,21 +102,8 @@ export class TestFormComponent implements OnInit {
     })
 
     this.g1.controls.push(this.c2)
-    this.g1.controls.push(this.c2)
-    this.g1.controls.push(this.c2)
-    this.g1.controls.push(this.c2)
-    this.g1.controls.push(this.c2)
-    this.g1.controls.push(this.c2)
-    this.g1.controls.push(this.c2)
+
     let g2 = new CyiaFormGroup()
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
-    g2.controls.push(this.control)
     g2.controls.push(this.control)
     g2.gridTemplateAreas = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 0, 0, 0]]
     this.g1.controls.push(g2)

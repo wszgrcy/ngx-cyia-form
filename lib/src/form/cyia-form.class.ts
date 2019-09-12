@@ -34,16 +34,20 @@ export class _CyiaFormControl<T = any>{
     @ChangeEmit()
     /**显示标签,控件内 */
     label?: string;
+    /**是否显示错误,表单域内使用,控件内 */
+    displayError?: boolean = true
+    /**控件提示,表单域内使用,控件内 */
+    hint?: string
     /**标签位置,控件内 */
     @ChangeEmit()
     labelPosition?: 'float' | 'inline' | 'default' | 'none' = 'default'
     /**是否必须,控件内 */
     required?= false
     @ChangeEmit()
-    /**是否输出,group内 */
+    /**是否输出,控件内 */
     output?: boolean = true
     @ChangeEmit()
-    /**是否输出错误,group内 */
+    /**是否输出错误,控件内 */
     outputError?: boolean = true
     /**加入到表单控件中,如果是true,那么还需要再加入回来,group内 */
     @ChangeEmit()
@@ -51,10 +55,13 @@ export class _CyiaFormControl<T = any>{
     /**用于区分不同控件,控件内 */
     @ChangeEmit()
     type?: FormControlType = FormControlType.input
-    /**子类路径,控件内 */
+    /**
+     * todo
+     * 子类路径,控件内 */
     @ChangeEmit()
     subType?: string
     @ChangeEmit()
+    /**模式,读,写,控件内 */
     pattern?: Pattern = Pattern.r
     /**不同样式?,加载哪个样式上待商定,暂时不实现 */
     @ChangeEmit()
@@ -70,10 +77,10 @@ export class _CyiaFormControl<T = any>{
     // /**与隐藏冲突,废弃 */
     // @ChangeEmit()
     // display?: boolean = true
-    /**验证器,外部实现 */
+    /**验证器,控件内 */
     @ChangeEmit()
     validator?: ValidatorFn[]
-    /**限制输入,input */
+    /**限制输入,input,textarea,autocomplete,控件内 */
     // @ChangeEmit()
     limit?: (arg0: this, now, value) => boolean;
     /**md特性 */
@@ -86,7 +93,9 @@ export class _CyiaFormControl<T = any>{
     inputPipe?: (arg0: this, value) => any
     /**输出值管道转化,控件内 */
     outputPipe?: (arg0: this, value) => any
-    /**autocomplete使用 */
+    /**
+     * todo 只要是options都应该可以用
+     * autocomplete使用 */
     filterPipe?: (arg0: this, value) => Promise<CyiaOption<T>[]>
 }
 export class CyiaFormControl<T = any> extends _CyiaFormControl {
@@ -117,7 +126,7 @@ export class CyiaFormGroup {
     key?: string = `${Math.random()}`
     controls?: (CyiaFormControl | CyiaFormGroup)[] = []
     layoutStyle?: LayoutStyle = LayoutStyle.cssGrid
-    gridTemplateAreas?: number[][]=[[]]
+    gridTemplateAreas?: number[][] = [[]]
 }
 // export class CyiaFormArray {
 //     key: string = ''
