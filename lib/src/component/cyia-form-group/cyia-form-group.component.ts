@@ -1,7 +1,8 @@
-import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy, SimpleChanges, Renderer2, ViewChild, ViewContainerRef, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy, SimpleChanges, Renderer2, ViewChild, ViewContainerRef, ElementRef, ViewChildren, QueryList, Self, Host, SkipSelf, Optional, Injector, INJECTOR } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { CyiaFormGroup, CyiaFormControl } from '../../form/cyia-form.class';
-import { LayoutStyle } from 'lib/src/type/form-group.type';
+import { LayoutStyle } from '../../type/form-group.type';
+import { CyiaFormGroupService } from './cyia-form-group.service';
 
 @Component({
   selector: 'cyia-form-group',
@@ -11,7 +12,18 @@ import { LayoutStyle } from 'lib/src/type/form-group.type';
     useExisting: forwardRef(() => CyiaFormGroupComponent),
     provide: NG_VALUE_ACCESSOR,
     multi: true
-  }],
+  },
+    // CyiaFormGroupService
+    // {
+    //   provide: CyiaFormGroupService,
+    //   useFactory: (service) => {
+    //     if (!service) {
+    //       return new service()
+    //     }
+    //   },
+    //   deps: [CyiaFormGroupService]
+    // }
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'cyiaFormGroup&&cyiaFormGroup.layoutStyle'
@@ -19,20 +31,27 @@ import { LayoutStyle } from 'lib/src/type/form-group.type';
 })
 export class CyiaFormGroupComponent implements ControlValueAccessor {
   @Input() cyiaFormGroup: CyiaFormGroup
+  @Input() deep: number = 0
   @ViewChildren('controlEl', { read: ElementRef }) controlList: QueryList<ElementRef>
   @ViewChild('wrapper', { static: false }) set wrapper(val: ElementRef<HTMLDivElement>) {
     this.setLayout(val)
   }
   formGroup: FormGroup
+  init = false
   private changeFn: Function = () => { };
   private touchedFn: Function = () => { };
   value
+  @Input() service: CyiaFormGroupService
   constructor(
     private fb: FormBuilder,
-    private renderer: Renderer2
-  ) { }
+    private renderer: Renderer2,
+    private injector: Injector
+  ) {
+  }
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.cyiaFormGroup) {
+
+    if (changes.cyiaFormGroup && !this.init) {
+      if (!this.deep) this.service = new CyiaFormGroupService()
       let formGroup = new FormGroup({})
       this.cyiaFormGroup.controls.forEach((item) => {
         if (item instanceof CyiaFormGroup) {
@@ -46,13 +65,13 @@ export class CyiaFormGroupComponent implements ControlValueAccessor {
       })
       this.formGroup = formGroup
       this.valueChangeListener()
+      this.controlEventSubscribe()
+      this.init = true
     }
 
   }
   ngOnInit() {
-    setTimeout(() => {
-      console.log(this.formGroup)
-    }, 3000);
+
   }
   registerOnChange(fn) {
     this.changeFn = fn;
@@ -83,10 +102,36 @@ export class CyiaFormGroupComponent implements ControlValueAccessor {
   }
   valueChangeListener() {
     this.formGroup.valueChanges.subscribe((val) => {
-      console.log(val)
       this.valueChange(val)
     })
   }
+  /**
+   * 其他控件发送事件时调用
+   *
+   * @author cyia
+   * @date 2019-09-14
+   */
+  controlEventSubscribe() {
+    if (this.deep) return
+    this.service.event$.subscribe((e) => {
+      let control: CyiaFormGroup | CyiaFormControl<any> = this.cyiaFormGroup
+      try {
+        e.target.forEach((key) => {
+          control = (<CyiaFormGroup>control).getControl(key)
+        })
+        control[e.type] = e.value
+      } catch (error) {
+        console.warn('发生事件路径错误')
+      }
+    })
+  }
+  /**
+   * 设置显示布局
+   *
+   * @author cyia
+   * @date 2019-09-15
+   * @param wrapper
+   */
   setLayout(wrapper: ElementRef<HTMLDivElement>) {
     switch (this.cyiaFormGroup.layoutStyle) {
       case LayoutStyle.cssGrid:

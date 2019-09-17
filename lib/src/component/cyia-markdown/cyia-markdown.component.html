@@ -1,0 +1,23 @@
+<div>
+    <button mat-icon-button (click)="format('wrap','bold')">
+        <mat-icon>format_bold</mat-icon>
+    </button>
+    <button mat-icon-button (click)="format('wrap','format_italic')">
+        <mat-icon>format_italic</mat-icon>
+    </button>
+    <button mat-icon-button (click)="format('wrap','delete')">
+        <mat-icon>delete</mat-icon>
+    </button>
+    <div (mouseenter)="buttonEnter('quote')" (mouseleave)="buttonLeave('quote')" class="button--hover">
+        <button mat-icon-button (click)="format('start','format_quote')">
+            <mat-icon>format_quote</mat-icon>
+        </button>
+        <div class="hover__content" [class.hover__content--display]="flag.quote">
+            123
+        </div>
+    </div>
+    <!-- <mat-menu #quoteTemplate="matMenu">
+        <mat-slider thumbLabel tickInterval="10" min="1" max="10"></mat-slider>
+    </mat-menu> -->
+</div>
+<div #container style="height: 100px;"></div>

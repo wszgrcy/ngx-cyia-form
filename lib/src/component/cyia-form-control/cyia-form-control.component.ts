@@ -1,11 +1,12 @@
-import { Component, OnInit, forwardRef, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, ValidationErrors } from '@angular/forms';
 import { CyiaFormControl } from '../../form/cyia-form.class';
 import { CyiaFormControlFlag } from '../../type/form-control.type';
-import { take } from "rxjs/operators";
+import { take, filter } from "rxjs/operators";
 import { FormControlType } from '../../enum/control-type.enum';
 import { CyiaOption } from '../../type/options.type';
 import { BehaviorSubject } from 'rxjs';
+import { CyiaFormGroupService } from '../cyia-form-group/cyia-form-group.service';
 @Component({
   selector: 'cyia-form-control',
   templateUrl: './cyia-form-control.component.html',
@@ -26,6 +27,8 @@ import { BehaviorSubject } from 'rxjs';
   }
 })
 export class CyiaFormControlComponent implements OnInit {
+  @Input() service: CyiaFormGroupService
+
   /**
    * 在只读情况下各种控件的处理
    */
@@ -55,7 +58,6 @@ export class CyiaFormControlComponent implements OnInit {
    */
   @Input() set cyiaFormControl(value) {
     if (!value) return
-    // console.log(value)
     this.initFormControl(value)
     this.cyiaFormControlInput(value)
     //doc 取消上一次订阅
@@ -79,6 +81,7 @@ export class CyiaFormControlComponent implements OnInit {
     private ngZone: NgZone
   ) { }
 
+
   /**
    * 改用响应式表单控制
    * 初始化表单控制
@@ -91,7 +94,8 @@ export class CyiaFormControlComponent implements OnInit {
     this.formControl = new FormControl(
       cyiaFormControl.inputPipe ? cyiaFormControl.inputPipe(cyiaFormControl, cyiaFormControl.value) : cyiaFormControl.value,
       cyiaFormControl.validator)
-    this.formControl.valueChanges.subscribe((val) => {
+    this.formControl.valueChanges.subscribe(async (val) => {
+      //doc 错误提示
       this.errors = this.setErrorHint(this.formControl.errors)
       this.nowError = Object.values(this.errors)[0] as string
       //doc 如果允许输出错误,才输出
@@ -107,6 +111,13 @@ export class CyiaFormControlComponent implements OnInit {
         })
       }
       !this.formControl.touched && this.formControl.markAllAsTouched()
+      //doc 值变更外界调用
+      cyiaFormControl.valueChange && this.service && cyiaFormControl.valueChange(cyiaFormControl, this.formControl, this.formControl.value).then((list) => {
+        list.forEach((item) => {
+          this.service.event$.next(item)
+        })
+      })
+      cyiaFormControl.value = val
     })
   }
   ngOnInit() {
@@ -191,6 +202,11 @@ export class CyiaFormControlComponent implements OnInit {
     cyiaFormControl.disabled && this.formControl.disable()
     !cyiaFormControl.disabled && this.formControl.enable()
   }
+  validatorChange(cyiaFormControl: CyiaFormControl) {
+    if (cyiaFormControl.validator && cyiaFormControl instanceof Array) {
+      this.formControl.setValidators(cyiaFormControl.validator)
+    }
+  }
   /**
    * 每次类变更的操作
    *
@@ -207,37 +223,42 @@ export class CyiaFormControlComponent implements OnInit {
     await this.formFieldChange(cyiaFormControl)
   }
   changeSubscribe(cyiaFormControl: CyiaFormControl) {
-    cyiaFormControl.change$.subscribe((val) => {
-      switch (val.type) {
-        case 'labelPosition':
-          this.labelPositionChange(cyiaFormControl)
-          break;
-        case 'pattern':
-          this.readValueChange(cyiaFormControl)
-          break
-        case 'value':
-          this.inputValueChange(cyiaFormControl)
-          this.readValueChange(cyiaFormControl)
-          this.oldValueChange(cyiaFormControl)
-          break
-        case 'required':
-          this.labelPositionChange(cyiaFormControl)
-          break
-        case 'type':
-          this.formFieldChange(cyiaFormControl)
-          break
-        case 'options':
-          this.optionsChange(cyiaFormControl)
-          break
-        case 'disabled':
-          this.disabledChange(cyiaFormControl)
-          break
-        default:
-          break;
-      }
+    cyiaFormControl.change$
+      .pipe(filter((change) => !change.target))
+      .subscribe((val) => {
+        switch (val.type) {
+          case 'labelPosition':
+            this.labelPositionChange(cyiaFormControl)
+            break;
+          case 'pattern':
+            this.readValueChange(cyiaFormControl)
+            break
+          case 'value':
+            this.inputValueChange(cyiaFormControl)
+            this.readValueChange(cyiaFormControl)
+            this.oldValueChange(cyiaFormControl)
+            break
+          case 'required':
+            this.labelPositionChange(cyiaFormControl)
+            break
+          case 'type':
+            this.formFieldChange(cyiaFormControl)
+            break
+          case 'options':
+            this.optionsChange(cyiaFormControl)
+            break
+          case 'disabled':
+            this.disabledChange(cyiaFormControl)
+            break
+          case 'validator':
+            this.validatorChange(cyiaFormControl)
+            break
+          default:
+            break;
+        }
 
-      this.cd.markForCheck()
-    })
+        this.cd.markForCheck()
+      })
   }
 
   /**
@@ -248,7 +269,6 @@ export class CyiaFormControlComponent implements OnInit {
    * @param e
    */
   limit(e) {
-    // console.log(e)
     if (e.inputType == 'insertText' || e.inputType == 'insertCompositionText' && e.data.trim()) {
       if (this.cyiaFormControl.limit && this.cyiaFormControl.limit(this.cyiaFormControl, e.data, this.formControl.value)) {
         this.ngZone.onStable.pipe(take(1)).subscribe(() => {
@@ -299,9 +319,8 @@ export class CyiaFormControlComponent implements OnInit {
   valueInputSubscribe() {
     this.valueInput$.subscribe((value) => {
       if (value === undefined) return
-      console.log(value)
       this.formControl.patchValue(this._cyiaFormControl.outputPipe ? this._cyiaFormControl.outputPipe(this._cyiaFormControl, value) : value)
-
+      this.cd.markForCheck()
     })
   }
 }

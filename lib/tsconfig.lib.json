@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/lib",
     "target": "es2015",
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "declaration": true,
     "sourceMap": true,
@@ -14,8 +14,26 @@
     "types": [],
     "lib": [
       "dom",
-      "es2015"
-    ]
+      "es2015",
+      "esnext"
+    ],
+    "paths": {
+      // "editor.worker": [
+      //   "node_modules/monaco-editor/esm/vs/editor/editor.worker.js"
+      // ],
+      // "json.worker": [
+      //   "node_modules/monaco-editor/esm/vs/language/json/json.worker"
+      // ],
+      // "css.worker": [
+      //   "node_modules/monaco-editor/esm/vs/language/css/css.worker"
+      // ],
+      // "html.worker": [
+      //   "node_modules/monaco-editor/esm/vs/language/html/html.worker"
+      // ],
+      // "ts.worker": [
+      //   "node_modules/monaco-editor/esm/vs/language/typescript/ts.worker"
+      // ]
+    }
   },
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,

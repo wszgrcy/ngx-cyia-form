@@ -9,10 +9,11 @@
     "@angular/core": ">=6.0.0",
     "@angular/animations": ">=6.1.10",
     "@angular/cdk": ">=8.1.4",
-    "@angular/material": ">=8.1.4"
+    "@angular/material": ">=8.1.4",
+    "monaco-editor": "0.17.1",
+    "cyia-ngx-common": "2.0.1"
   },
   "dependencies": {
-    "cyia-ngx-common": "1.2.0"
   },
   "author": {
     "name": "cyia",

@@ -8,7 +8,12 @@
       "sourceRoot": "demo/src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -23,7 +28,8 @@
               "demo/src/assets"
             ],
             "styles": [
-              "demo/src/styles.css"
+              "demo/src/styles.css",
+              "./node_modules/monaco-editor/min/vs/editor/editor.main.css"
             ],
             "scripts": []
           },
@@ -67,6 +73,7 @@
       "prefix": "lib",
       "schematics": {
         "@schematics/angular:component": {
+          "style": "scss",
           "styleext": "scss"
         }
       },
