@@ -1,5 +1,5 @@
 export enum WrapType {
-    bold = 'bold',
+    format_bold = 'bold',
     format_italic = 'format_italic',
     format_bi = 'bi',
     delete = 'delete'
