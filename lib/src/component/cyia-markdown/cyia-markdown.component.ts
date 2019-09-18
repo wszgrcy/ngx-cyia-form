@@ -12,6 +12,7 @@ import { InsertUrlComponent } from './insert/insert-url/insert-url.component';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import md from "markdown-it";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 // declare 
 // const monaco = require('monaco-editor')
 // let loadedMonaco = false;
@@ -62,8 +63,8 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
   constructor(
     private matDialog: MatDialog,
     private cd: ChangeDetectorRef,
-    private domSanitizer: DomSanitizer
-
+    private domSanitizer: DomSanitizer,
+    private snackBar: MatSnackBar
   ) { }
   writeValue(value) {
     if (typeof value == 'string') {
@@ -203,6 +204,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
 
   save() {
     this.notifyValueChange(this.instance.getValue())
+    this.snackBar.open('保存成功', undefined, { duration: 2000 })
   }
   /**
    * 只读时初始化渲染

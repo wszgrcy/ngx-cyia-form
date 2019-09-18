@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSliderModule } from '@angular/material/slider';
 import { InsertUrlModule } from './insert/insert-url/insert-url.module';
 import { InsertImageModule } from './insert/insert-image/insert-image.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { InsertImageModule } from './insert/insert-image/insert-image.module';
     MatMenuModule,
     MatSliderModule,
     InsertImageModule,
-    InsertUrlModule
+    InsertUrlModule,
+    MatSnackBarModule
   ],
   declarations: [CyiaMarkdownComponent],
   entryComponents: [CyiaMarkdownComponent],
