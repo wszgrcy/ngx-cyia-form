@@ -4,7 +4,9 @@ import { CyiaMarkdownComponent } from './cyia-markdown.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatSliderModule} from '@angular/material/slider';
+import { MatSliderModule } from '@angular/material/slider';
+import { InsertUrlModule } from './insert/insert-url/insert-url.module';
+import { InsertImageModule } from './insert/insert-image/insert-image.module';
 
 @NgModule({
   imports: [
@@ -12,7 +14,9 @@ import {MatSliderModule} from '@angular/material/slider';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    MatSliderModule
+    MatSliderModule,
+    InsertImageModule,
+    InsertUrlModule
   ],
   declarations: [CyiaMarkdownComponent],
   entryComponents: [CyiaMarkdownComponent],

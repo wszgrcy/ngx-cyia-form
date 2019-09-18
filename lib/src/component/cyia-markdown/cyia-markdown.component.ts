@@ -5,7 +5,10 @@ import { Subscription } from 'rxjs';
 import { importScript } from 'cyia-ngx-common';
 import { EDITOR_OP } from 'lib/src/symbol/editor.symbol';
 import { WrapType, StartType, MultiStartType } from 'lib/src/type/editor.type';
-import { repeat } from 'rxjs/operators';
+import { repeat, take } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { InsertImageComponent } from './insert/insert-image/insert-image.component';
+import { InsertUrlComponent } from './insert/insert-url/insert-url.component';
 // declare 
 // const monaco = require('monaco-editor')
 let loadedMonaco = false;
@@ -47,7 +50,7 @@ export class CyiaMarkdownComponent implements OnInit {
 
 
 
-  constructor() { }
+  constructor(private matDialog: MatDialog) { }
 
   ngOnInit() {
     console.log(this.container);
@@ -144,12 +147,32 @@ export class CyiaMarkdownComponent implements OnInit {
 
     this.instance.focus()
   }
-  buttonEnter(property: string) {
-    console.log('进入')
-    this.flag[property] = true
+  async open(type: string) {
+    let res
+    switch (type) {
+      case 'image':
+        res = await this.matDialog.open(InsertImageComponent).afterClosed().pipe(take(1)).toPromise()
+        break;
+      case 'url':
+        res = await this.matDialog.open(InsertUrlComponent).afterClosed().pipe(take(1)).toPromise()
+        break;
+      default:
+        break;
+    }
+    this.insert(res)
   }
-  buttonLeave(property: string) {
-    console.log('离开')
-    this.flag[property] = false
+  insert(value: string) {
+    let selection = this.instance.getSelection().clone()
+    this.instance.executeEdits(`${this.editorBarPrefix}image`, [{ range: new monaco.Range(selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn), text: value }])
+    this.instance.setSelection({ startLineNumber: selection.startLineNumber, startColumn: selection.startColumn, endLineNumber: selection.endLineNumber, endColumn: selection.endColumn + value.length })
+    this.instance.focus()
   }
+  // buttonEnter(property: string) {
+  //   console.log('进入')
+  //   this.flag[property] = true
+  // }
+  // buttonLeave(property: string) {
+  //   console.log('离开')
+  //   this.flag[property] = false
+  // }
 }
