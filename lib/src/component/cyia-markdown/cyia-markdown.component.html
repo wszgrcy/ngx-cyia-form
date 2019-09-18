@@ -1,3 +1,6 @@
+<button mat-icon-button (click)="switchPattern()" class="switch-button">
+    <mat-icon>{{!disabled?'toggle_on':'toggle_off'}}</mat-icon>
+</button>
 <div [class.write-item--disabled]="disabled">
     <div>
         <button mat-icon-button (click)="format('wrap','format_bold')">
@@ -22,13 +25,19 @@
             <mat-icon>power_input</mat-icon>
         </button>
         <button mat-icon-button (click)="open('image')">
-            <mat-icon>power_input</mat-icon>
+            <mat-icon>insert_photo</mat-icon>
+        </button>
+        <button mat-icon-button (click)="open('url')">
+            <mat-icon>link</mat-icon>
+        </button>
+        <button mat-icon-button (click)="save()">
+            <mat-icon>save</mat-icon>
         </button>
     </div>
     <div #container style="height: 100px;"></div>
 </div>
 
 
-<div [innerHTML]="readValue" [class.read-item--disabled]="!disabled">
+<div [innerHTML]="readValue" [class.read-item--disabled]="!disabled" class="read-item">
 
 </div>

@@ -29,10 +29,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CyiaMarkdownComponent implements ControlValueAccessor {
+  @ViewChild('container', { static: true }) container: ElementRef<HTMLDivElement>
   readonly editorBarPrefix = 'editor-bar-'
-  flag = {
-    quote: false
-  }
+  // flag = {
+  //   quote: false
+  // }
   instance: monaco.editor.IStandaloneCodeEditor
   readonly WRAP_GROUP: { [name: string]: string } = {
     [WrapType.format_bold]: '**',
@@ -53,10 +54,10 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
       value: new Array(100).fill(0).map((v, i) => `${i + 1}. `), repeat: false
     }
   }
-  @ViewChild('container', { static: false }) container: ElementRef<HTMLDivElement>
 
-  disabled: Boolean = true
+  disabled: Boolean = false
   value: string = ''
+  tempValue: string
   readValue: SafeHtml
   constructor(
     private matDialog: MatDialog,
@@ -67,6 +68,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
   writeValue(value) {
     if (typeof value == 'string') {
       this.value = value
+      this.tempValue = value
     }
   }
   registerOnChange(fn) {
@@ -89,8 +91,6 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
     }
   }
   ngOnInit() {
-    console.log(this.container);
-    console.log('测试')
     if (this.disabled) {
       this.initRead()
     } else {
@@ -135,6 +135,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
       selection.endLineNumber == selection.startLineNumber) {
       this.instance.setSelection({ startLineNumber: selection.startLineNumber, startColumn: selection.startColumn + wrapText.length, endLineNumber: selection.startLineNumber, endColumn: selection.startColumn + wrapText.length })
     } else {
+      console.log(wrapText)
       this.instance.setSelection({ startLineNumber: selection.endLineNumber, startColumn: selection.endColumn + wrapText.length * 2, endLineNumber: selection.endLineNumber, endColumn: selection.endColumn + wrapText.length * 2 })
     }
     this.instance.focus()
@@ -190,7 +191,8 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
       default:
         break;
     }
-    this.insert(res)
+    console.log(res)
+    res && this.insert(res)
   }
   insert(value: string) {
     let selection = this.instance.getSelection().clone()
@@ -208,7 +210,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
    * @memberof CyiaMarkdownComponent
    */
   initRead() {
-    this.readValue = this.domSanitizer.bypassSecurityTrustHtml(md({ html: true }).render(this.value))
+    this.readValue = this.domSanitizer.bypassSecurityTrustHtml(md({ html: true }).render(this.tempValue))
   }
   initWrite() {
     this.instance = this.instance || monaco.editor.create(this.container.nativeElement, {
@@ -219,6 +221,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
   }
   switchPattern() {
     this.disabled = !this.disabled;
+    this.tempValue = this.instance.getValue()
     if (this.disabled) {
       this.initRead()
     } else {

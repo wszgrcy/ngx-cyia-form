@@ -3,6 +3,7 @@
   <mat-dialog-content class="mat-typography">
     <mat-form-field>
       <input matInput placeholder="输入图片地址" required formControlName="src">
+      <!-- <mat-error *ngIf="formGroup.controls.src.invalid">{{error('src')}}</mat-error> -->
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="输入图片替换文本(图片失败时使用)" formControlName="alt">
@@ -14,6 +15,6 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-button [disabled]="formGroup.invalid" type="submit">确认</button>
-    <button mat-button [mat-dialog-close]="true" type="button">取消</button>
+    <button mat-button [mat-dialog-close]="null" type="button">取消</button>
   </mat-dialog-actions>
 </form>

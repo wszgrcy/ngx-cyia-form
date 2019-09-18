@@ -1,15 +1,18 @@
 :host {
+  display: block;
+  position: relative;
+
   .button--hover {
     position: relative;
-    display : inline-block;
+    display: inline-block;
 
     &>button {}
 
     .hover__content {
-      position   : absolute;
-      left       : 0;
+      position: absolute;
+      left: 0;
       //   bottom: 0;
-      display    : none;
+      display: none;
 
       &.hover__content--display {
         display: block;
@@ -18,8 +21,19 @@
     }
   }
 
+  .read-item {
+    padding-top: 40px;
+    padding-left: 64px;
+  }
+
   .write-item--disabled,
   .read-item--disabled {
     display: none;
+  }
+
+  .switch-button {
+    position: absolute;
+    // top: 0;
+    right: 0;
   }
 }

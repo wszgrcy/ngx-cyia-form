@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { InsertUrlComponent } from './insert-url.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   imports: [
@@ -12,10 +13,11 @@ import { InsertUrlComponent } from './insert-url.component';
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule
   ],
   declarations: [InsertUrlComponent],
-  exports: [InsertUrlComponent,MatDialogModule],
+  exports: [InsertUrlComponent, MatDialogModule],
   entryComponents: [InsertUrlComponent]
 })
 export class InsertUrlModule { }
