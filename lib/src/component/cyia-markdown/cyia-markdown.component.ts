@@ -4,7 +4,8 @@ import * as monaco from 'monaco-editor';
 import { Subscription } from 'rxjs';
 import { importScript } from 'cyia-ngx-common';
 import { EDITOR_OP } from 'lib/src/symbol/editor.symbol';
-import { WrapType, StartType } from 'lib/src/type/editor.type';
+import { WrapType, StartType, MultiStartType } from 'lib/src/type/editor.type';
+import { repeat } from 'rxjs/operators';
 // declare 
 // const monaco = require('monaco-editor')
 let loadedMonaco = false;
@@ -27,9 +28,18 @@ export class CyiaMarkdownComponent implements OnInit {
     [WrapType.delete]: '~~'
   }
   readonly START_GROUP = {
-    [StartType.format_quote]: '>'
-
+    [StartType.format_quote]: '>',
+    [StartType.format_list_bulleted]: '- '
     //---
+  }
+  readonly MULTI_START: { [name: string]: { value: string | string[], repeat: boolean } } = {
+    [MultiStartType.format_quote]: {
+      value: '>', repeat: true
+    },
+    [MultiStartType.format_list_bulleted]: { value: '- ', repeat: true },
+    [MultiStartType.format_list_numbered]: {
+      value: new Array(100).fill(0).map((v, i) => `${i + 1}. `), repeat: false
+    }
   }
   @ViewChild('container', { static: true }) container: ElementRef<HTMLDivElement>
 
@@ -60,25 +70,24 @@ export class CyiaMarkdownComponent implements OnInit {
     })
   }
   ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    setTimeout(() => {
-      // let editor = monaco.editor
-      // editor.create(this.container.nativeElement, {
-      //   language: 'markdown'
-      // })
-    }, 0);
+
   }
   initMonaco() {
 
   }
-  format(type: string, subType: WrapType | StartType) {
+  format(type: string, subType?: WrapType | StartType) {
     switch (type) {
       case 'wrap':
         this.wrap(subType as WrapType)
         break;
       case 'start':
         this.formatStart(subType as StartType)
+        break
+      case 'multiStart':
+        this.formatMulti(subType)
+        break
+      case 'divider':
+        this.formatDivider()
       default:
         break;
     }
@@ -105,24 +114,34 @@ export class CyiaMarkdownComponent implements OnInit {
     this.instance.focus()
   }
   formatMulti(type) {
-    let list = []
-    let selections = this.instance.getSelections().map((selection) => selection.clone())
+    let obj = this.MULTI_START[type]
+    let selections = this.instance.getSelections().map((selection) => selection.clone()).sort((a, b) => a.startLineNumber - b.startLineNumber)
+    let list: string[] = obj.repeat ? new Array(selections.length).fill(obj.value) : obj.value as string[];
     if (list.length < selections.length) throw '选中行过长,无法添加'
     selections.forEach((selection, i) => {
       this.instance.executeEdits(`${this.editorBarPrefix}${type}`, [{ range: new monaco.Range(selection.endLineNumber, 1, selection.endLineNumber, 1), text: list[i] }])
     })
-    // const range: monaco.ISelection[] = 
-    // this.instance.setSelections()
+
+    this.instance.setSelections(selections.map((item, i) =>
+      monaco.Selection.createWithDirection(item.startLineNumber,
+        item.startColumn + list[i].length,
+        item.endLineNumber,
+        item.endColumn + list[i].length, 0)
+    ))
     this.instance.focus()
   }
   formatDivider() {
     let selection = this.instance.getSelection().clone()
+    console.log(selection.startColumn)
+    console.log(selection.endLineNumber)
     if (selection.startColumn !== 1) {
-      this.instance.executeEdits(`${this.editorBarPrefix}divider`, [{ range: new monaco.Range(selection.startLineNumber, 1, selection.startLineNumber, 1), text: '\n---\n' }])
+      this.instance.executeEdits(`${this.editorBarPrefix}divider`, [{ range: new monaco.Range(selection.endLineNumber, selection.endColumn, selection.endLineNumber, selection.endColumn), text: '\n\n---  \n' }])
+      this.instance.setSelection(monaco.Selection.createWithDirection(selection.startLineNumber + 3, 1, selection.endLineNumber + 3, 1, 0))
     } else {
-      this.instance.executeEdits(`${this.editorBarPrefix}divider`, [{ range: new monaco.Range(selection.startLineNumber, 1, selection.startLineNumber, 1), text: '---\n' }])
+      this.instance.executeEdits(`${this.editorBarPrefix}divider`, [{ range: new monaco.Range(selection.endLineNumber, 1, selection.endLineNumber, 1), text: '\n---  \n' }])
+      this.instance.setSelection(monaco.Selection.createWithDirection(selection.startLineNumber + 2, selection.startColumn, selection.endLineNumber + 2, selection.endColumn, 0))
     }
-    // this.instance.setSelection({ startLineNumber: selection.startLineNumber, startColumn: selection.startColumn + wrapText.length, endLineNumber: selection.endLineNumber, endColumn: selection.endColumn + wrapText.length })
+
     this.instance.focus()
   }
   buttonEnter(property: string) {

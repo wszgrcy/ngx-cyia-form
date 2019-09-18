@@ -8,19 +8,17 @@
     <button mat-icon-button (click)="format('wrap','delete')">
         <mat-icon>delete</mat-icon>
     </button>
-    <button mat-icon-button (click)="format('start','format_quote')">
+    <button mat-icon-button (click)="format('multiStart','format_quote')">
         <mat-icon>format_quote</mat-icon>
     </button>
-    <button mat-icon-button (click)="format('start','format_quote')">
-        <mat-icon>format_quote</mat-icon>
+    <button mat-icon-button (click)="format('multiStart','format_list_bulleted')">
+        <mat-icon>format_list_bulleted</mat-icon>
     </button>
-    <!-- <div (mouseenter)="buttonEnter('quote')" (mouseleave)="buttonLeave('quote')" class="button--hover">
-        <div class="hover__content" [class.hover__content--display]="flag.quote">
-            123
-        </div>
-    </div> -->
-    <!-- <mat-menu #quoteTemplate="matMenu">
-        <mat-slider thumbLabel tickInterval="10" min="1" max="10"></mat-slider>
-    </mat-menu> -->
+    <button mat-icon-button (click)="format('multiStart','format_list_numbered')">
+        <mat-icon>format_list_numbered</mat-icon>
+    </button>
+    <button mat-icon-button (click)="format('divider')">
+        <mat-icon>power_input</mat-icon>
+    </button>
 </div>
 <div #container style="height: 100px;"></div>
