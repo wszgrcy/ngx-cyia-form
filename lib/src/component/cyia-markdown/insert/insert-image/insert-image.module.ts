@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule
   ],
   declarations: [InsertImageComponent],
-  exports: [InsertImageComponent]
+  exports: [InsertImageComponent, MatDialogModule],
+  entryComponents: [InsertImageComponent]
 })
 export class InsertImageModule { }

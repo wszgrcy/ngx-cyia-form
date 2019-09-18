@@ -15,6 +15,7 @@ import { InsertUrlComponent } from './insert-url.component';
     MatDialogModule
   ],
   declarations: [InsertUrlComponent],
-  exports: [InsertUrlComponent]
+  exports: [InsertUrlComponent,MatDialogModule],
+  entryComponents: [InsertUrlComponent]
 })
 export class InsertUrlModule { }
