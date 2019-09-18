@@ -3,9 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-insert-image',
-  templateUrl: './insert-image.component.html',
-  styleUrls: ['./insert-image.component.scss']
+  selector: 'app-insert-url',
+  templateUrl: './insert-url.component.html',
+  styleUrls: ['./insert-url.component.scss']
 })
 export class InsertUrlComponent implements OnInit {
   formGroup: FormGroup

@@ -1,27 +1,34 @@
-<div>
-    <button mat-icon-button (click)="format('wrap','format_bold')">
-        <mat-icon>format_bold</mat-icon>
-    </button>
-    <button mat-icon-button (click)="format('wrap','format_italic')">
-        <mat-icon>format_italic</mat-icon>
-    </button>
-    <button mat-icon-button (click)="format('wrap','delete')">
-        <mat-icon>delete</mat-icon>
-    </button>
-    <button mat-icon-button (click)="format('multiStart','format_quote')">
-        <mat-icon>format_quote</mat-icon>
-    </button>
-    <button mat-icon-button (click)="format('multiStart','format_list_bulleted')">
-        <mat-icon>format_list_bulleted</mat-icon>
-    </button>
-    <button mat-icon-button (click)="format('multiStart','format_list_numbered')">
-        <mat-icon>format_list_numbered</mat-icon>
-    </button>
-    <button mat-icon-button (click)="format('divider')">
-        <mat-icon>power_input</mat-icon>
-    </button>
-    <button mat-icon-button (click)="open('image')">
-        <mat-icon>power_input</mat-icon>
-    </button>
+<div [class.write-item--disabled]="disabled">
+    <div>
+        <button mat-icon-button (click)="format('wrap','format_bold')">
+            <mat-icon>format_bold</mat-icon>
+        </button>
+        <button mat-icon-button (click)="format('wrap','format_italic')">
+            <mat-icon>format_italic</mat-icon>
+        </button>
+        <button mat-icon-button (click)="format('wrap','delete')">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button (click)="format('multiStart','format_quote')">
+            <mat-icon>format_quote</mat-icon>
+        </button>
+        <button mat-icon-button (click)="format('multiStart','format_list_bulleted')">
+            <mat-icon>format_list_bulleted</mat-icon>
+        </button>
+        <button mat-icon-button (click)="format('multiStart','format_list_numbered')">
+            <mat-icon>format_list_numbered</mat-icon>
+        </button>
+        <button mat-icon-button (click)="format('divider')">
+            <mat-icon>power_input</mat-icon>
+        </button>
+        <button mat-icon-button (click)="open('image')">
+            <mat-icon>power_input</mat-icon>
+        </button>
+    </div>
+    <div #container style="height: 100px;"></div>
 </div>
-<div #container style="height: 100px;"></div>
+
+
+<div [innerHTML]="readValue" [class.read-item--disabled]="!disabled">
+
+</div>

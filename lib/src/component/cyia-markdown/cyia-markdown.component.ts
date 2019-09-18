@@ -1,5 +1,5 @@
 /// <reference types="monaco-editor" />
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, Sanitizer } from '@angular/core';
 import * as monaco from 'monaco-editor';
 import { Subscription } from 'rxjs';
 import { importScript } from 'cyia-ngx-common';
@@ -9,17 +9,26 @@ import { repeat, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { InsertImageComponent } from './insert/insert-image/insert-image.component';
 import { InsertUrlComponent } from './insert/insert-url/insert-url.component';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import md from "markdown-it";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 // declare 
 // const monaco = require('monaco-editor')
-let loadedMonaco = false;
-let loadPromise: Promise<void>;
+// let loadedMonaco = false;
+// let loadPromise: Promise<void>;
 // declare let monaco
 @Component({
   selector: 'cyia-markdown',
   templateUrl: './cyia-markdown.component.html',
-  styleUrls: ['./cyia-markdown.component.scss']
+  styleUrls: ['./cyia-markdown.component.scss'],
+  providers: [{
+    useExisting: forwardRef(() => CyiaMarkdownComponent),
+    provide: NG_VALUE_ACCESSOR,
+    multi: true
+  }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CyiaMarkdownComponent implements OnInit {
+export class CyiaMarkdownComponent implements ControlValueAccessor {
   readonly editorBarPrefix = 'editor-bar-'
   flag = {
     quote: false
@@ -44,33 +53,55 @@ export class CyiaMarkdownComponent implements OnInit {
       value: new Array(100).fill(0).map((v, i) => `${i + 1}. `), repeat: false
     }
   }
-  @ViewChild('container', { static: true }) container: ElementRef<HTMLDivElement>
+  @ViewChild('container', { static: false }) container: ElementRef<HTMLDivElement>
 
+  disabled: Boolean = true
+  value: string = ''
+  readValue: SafeHtml
+  constructor(
+    private matDialog: MatDialog,
+    private cd: ChangeDetectorRef,
+    private domSanitizer: DomSanitizer
 
-
-
-
-  constructor(private matDialog: MatDialog) { }
-
+  ) { }
+  writeValue(value) {
+    if (typeof value == 'string') {
+      this.value = value
+    }
+  }
+  registerOnChange(fn) {
+    this.changeFn = fn;
+  }
+  registerOnTouched(fn) {
+    this.touchedFn = fn;
+  }
+  private changeFn: Function = () => { };
+  private touchedFn: Function = () => { };
+  notifyValueChange(value: string) {
+    this.changeFn(value)
+    this.touchedFn(value)
+  }
+  setDisabledState(disabled: Boolean) {
+    if (typeof disabled == 'boolean') {
+      this.instance.updateOptions({ readOnly: disabled })
+      this.disabled = disabled
+      this.cd.markForCheck()
+    }
+  }
   ngOnInit() {
     console.log(this.container);
     console.log('测试')
-    // importScript('vs/loader.js').then(async (value) => {
-    //   console.log(value)
+    if (this.disabled) {
+      this.initRead()
+    } else {
+      this.initWrite()
+    }
 
-    //   await importScript('vs/editor/editor.main.nls.js')
-    //   await importScript('vs/editor/editor.main.js')
-    //   setTimeout(() => {
-    //     console.log(window['monaco'])
-
-    //   }, 1000);
+    // this.instance = monaco.editor.create(this.container.nativeElement, {
+    //   language: 'markdown',
+    //   minimap: { enabled: false },
+    //   // automaticLayout: true
     // })
-
-    this.instance = monaco.editor.create(this.container.nativeElement, {
-      language: 'markdown',
-      minimap: { enabled: false },
-      // automaticLayout: true
-    })
   }
   ngAfterViewInit(): void {
 
@@ -167,12 +198,32 @@ export class CyiaMarkdownComponent implements OnInit {
     this.instance.setSelection({ startLineNumber: selection.startLineNumber, startColumn: selection.startColumn, endLineNumber: selection.endLineNumber, endColumn: selection.endColumn + value.length })
     this.instance.focus()
   }
-  // buttonEnter(property: string) {
-  //   console.log('进入')
-  //   this.flag[property] = true
-  // }
-  // buttonLeave(property: string) {
-  //   console.log('离开')
-  //   this.flag[property] = false
-  // }
+
+  save() {
+    this.notifyValueChange(this.instance.getValue())
+  }
+  /**
+   * 只读时初始化渲染
+   *
+   * @memberof CyiaMarkdownComponent
+   */
+  initRead() {
+    this.readValue = this.domSanitizer.bypassSecurityTrustHtml(md({ html: true }).render(this.value))
+  }
+  initWrite() {
+    this.instance = this.instance || monaco.editor.create(this.container.nativeElement, {
+      language: 'markdown',
+      minimap: { enabled: false },
+      // automaticLayout: true
+    })
+  }
+  switchPattern() {
+    this.disabled = !this.disabled;
+    if (this.disabled) {
+      this.initRead()
+    } else {
+      this.initWrite()
+    }
+    this.cd.markForCheck()
+  }
 }

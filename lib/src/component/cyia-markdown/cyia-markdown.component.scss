@@ -1,20 +1,25 @@
 :host {
   .button--hover {
     position: relative;
-    display: inline-block;
+    display : inline-block;
 
     &>button {}
 
     .hover__content {
-      position: absolute;
-      left: 0;
+      position   : absolute;
+      left       : 0;
       //   bottom: 0;
-      display: none;
+      display    : none;
 
       &.hover__content--display {
         display: block;
         z-index: 1;
       }
     }
+  }
+
+  .write-item--disabled,
+  .read-item--disabled {
+    display: none;
   }
 }
