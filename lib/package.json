@@ -1,17 +1,18 @@
 {
   "name": "cyia-ngx-form",
   "version": "2.0.0 beta",
-  "description": "angular 7 对象转化表单模块",
+  "description": "angular 8 对象转化表单模块",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/forms": ">=6.0.0",
-    "@angular/common": ">=6.0.0",
-    "@angular/core": ">=6.0.0",
+    "@angular/forms": ">=8.0.0",
+    "@angular/common": ">=8.0.0",
+    "@angular/core": ">=8.0.0",
     "@angular/animations": ">=6.1.10",
     "@angular/cdk": ">=8.1.4",
     "@angular/material": ">=8.1.4",
     "monaco-editor": "0.17.1",
-    "cyia-ngx-common": "2.0.1"
+    "cyia-ngx-common": "2.0.1",
+    "cyia-ngx-component": "0.0.22"
   },
   "dependencies": {
   },

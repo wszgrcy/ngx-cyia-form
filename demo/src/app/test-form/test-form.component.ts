@@ -110,14 +110,19 @@ export class TestFormComponent implements OnInit {
     })
 
     this.g1.controls.push(this.c2)
-
+    let md = new CyiaFormControl({
+      type: FormControlType.markdown,
+      pattern: Pattern.w,
+      height: 200
+    })
+    this.g1.controls.push(md)
     let g2 = new CyiaFormGroup()
     g2.key = '111'
     g2.controls.push(this.control)
     g2.gridTemplateAreas = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 0, 0, 0]]
     this.g1.controls.push(g2)
 
-    this.g1.gridTemplateAreas = [[1, 1, 2, 3, 4], [5, 6, 7, 0, 0], [8, 8, 8, 8, 8]]
+    this.g1.gridTemplateAreas = [[1, 1, 2, 2, 3], [0, 0, 2, 2, 0], [0, 0, 2, 2, 0]]
     this.g2 = g2
 
 

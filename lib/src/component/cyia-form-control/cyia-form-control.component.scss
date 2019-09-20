@@ -1,5 +1,6 @@
 :host {
   display: inline-block;
+  width: 100%;
 
   .cyia-form-control {
     display: flex;
@@ -71,6 +72,13 @@
       // &>mat-slider {
       //   align-self: center;
       // }
+    }
+  }
+  //doc markdown样式调整
+  &.markdown {
+    .cyia-form-control {
+      height: 100%;
+      align-items: stretch;
     }
   }
 }

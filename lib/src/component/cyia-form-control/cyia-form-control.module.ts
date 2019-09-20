@@ -9,7 +9,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { CyiaMarkdownModule } from '../cyia-markdown/cyia-markdown.module';
+import { CyiaDatePickerModule } from "cyia-ngx-component";
 @NgModule({
   imports: [
     CommonModule,
@@ -21,7 +22,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatRadioModule,
     MatSliderModule,
     MatSlideToggleModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    CyiaMarkdownModule,
+    CyiaDatePickerModule.forRoot('zh-cn')
   ],
   declarations: [CyiaFormControlComponent],
   exports: [CyiaFormControlComponent]

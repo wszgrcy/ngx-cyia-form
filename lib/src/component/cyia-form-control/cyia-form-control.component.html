@@ -58,8 +58,8 @@
     </ng-template>
 
     <ng-container *ngIf="!flag.formField">
-      <mat-label *ngIf="cyiaFormControl.labelPosition=='float'">{{cyiaFormControl.label}}</mat-label>
-      <span matPrefix *ngIf="cyiaFormControl.labelPosition=='inline'" class="label">{{cyiaFormControl.label}}</span>
+      <!-- <mat-label *ngIf="cyiaFormControl.labelPosition=='float'">{{cyiaFormControl.label}}</mat-label>
+      <span matPrefix *ngIf="cyiaFormControl.labelPosition=='inline'" class="label">{{cyiaFormControl.label}}</span> -->
 
       <ng-container [ngSwitch]="cyiaFormControl.type">
         <ng-container *ngSwitchCase="'checkbox'">
@@ -83,8 +83,10 @@
         </ng-container>
         <ng-container *ngSwitchCase="'slide-toggle'">
           <mat-slide-toggle [formControl]="formControl">
-
           </mat-slide-toggle>
+        </ng-container>
+        <ng-container *ngSwitchCase="'markdown'">
+          <cyia-markdown [formControl]="formControl" [height]="cyiaFormControl?.height"> </cyia-markdown>
         </ng-container>
       </ng-container>
 

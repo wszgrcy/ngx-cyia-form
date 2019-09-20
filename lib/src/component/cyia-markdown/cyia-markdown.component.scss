@@ -1,6 +1,7 @@
 :host {
   display: block;
   position: relative;
+  width: 100%;
 
   .button--hover {
     position: relative;
@@ -22,18 +23,33 @@
   }
 
   .read-item {
-    padding-top: 40px;
-    padding-left: 64px;
+
+    // padding-top: 40px;
+    // padding-left: 64px;
+    &.read-item--disabled {
+      display: none;
+    }
   }
 
-  .write-item--disabled,
-  .read-item--disabled {
-    display: none;
-  }
+
 
   .switch-button {
     position: absolute;
     // top: 0;
     right: 0;
+  }
+
+  .write-item {
+    // height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &.write-item--disabled {
+      display: none;
+    }
+  }
+
+  .monaco-editor--container {
+    flex: 1 1;
   }
 }

@@ -1,10 +1,6 @@
-/// <reference types="monaco-editor" />
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, Sanitizer } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, Sanitizer, SimpleChanges } from '@angular/core';
 import * as monaco from 'monaco-editor';
-import { Subscription } from 'rxjs';
-import { importScript } from 'cyia-ngx-common';
-import { EDITOR_OP } from 'lib/src/symbol/editor.symbol';
-import { WrapType, StartType, MultiStartType } from 'lib/src/type/editor.type';
+import { WrapType, StartType, MultiStartType } from '../../type/editor.type';
 import { repeat, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { InsertImageComponent } from './insert/insert-image/insert-image.component';
@@ -13,11 +9,8 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import md from "markdown-it";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
-// declare 
-// const monaco = require('monaco-editor')
-// let loadedMonaco = false;
-// let loadPromise: Promise<void>;
-// declare let monaco
+import { Pattern } from '../../form/cyia-form.class';
+import { coerceBooleanProperty, coerceNumberProperty, coerceCssPixelValue } from '@angular/cdk/coercion';
 @Component({
   selector: 'cyia-markdown',
   templateUrl: './cyia-markdown.component.html',
@@ -31,6 +24,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class CyiaMarkdownComponent implements ControlValueAccessor {
   @ViewChild('container', { static: true }) container: ElementRef<HTMLDivElement>
+  @Input() pattern: Pattern = Pattern.w;
+  @Input() height: string = '100px'
   readonly editorBarPrefix = 'editor-bar-'
   // flag = {
   //   quote: false
@@ -59,7 +54,10 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
   disabled: Boolean = false
   value: string = ''
   tempValue: string
+  /**只读时 */
   readValue: SafeHtml
+  /**只读模式 */
+  readMode = false
   constructor(
     private matDialog: MatDialog,
     private cd: ChangeDetectorRef,
@@ -92,24 +90,31 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
     }
   }
   ngOnInit() {
-    if (this.disabled) {
+    if (this.pattern == Pattern.r) {
       this.initRead()
-    } else {
+    } else if (this.pattern == Pattern.w) {
       this.initWrite()
     }
 
-    // this.instance = monaco.editor.create(this.container.nativeElement, {
-    //   language: 'markdown',
-    //   minimap: { enabled: false },
-    //   // automaticLayout: true
-    // })
   }
-  ngAfterViewInit(): void {
-
+  ngOnChanges(changes: SimpleChanges): void {
+    // console.log(changes)
+    if (changes.pattern) {
+      const pattern = changes.pattern.currentValue || changes.pattern.previousValue
+      this.readMode = pattern == Pattern.w ? false : true
+    }
+    if (changes.height) {
+      console.log(this.height)
+      this.height = coerceCssPixelValue(this.height)
+      console.log(this.height)
+    }
   }
-  initMonaco() {
-
-  }
+  /**
+   * 格式化
+   *
+   * @author cyia
+   * @date 2019-09-19
+   */
   format(type: string, subType?: WrapType | StartType) {
     switch (type) {
       case 'wrap':
@@ -136,7 +141,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
       selection.endLineNumber == selection.startLineNumber) {
       this.instance.setSelection({ startLineNumber: selection.startLineNumber, startColumn: selection.startColumn + wrapText.length, endLineNumber: selection.startLineNumber, endColumn: selection.startColumn + wrapText.length })
     } else {
-      console.log(wrapText)
+      // console.log(wrapText)
       this.instance.setSelection({ startLineNumber: selection.endLineNumber, startColumn: selection.endColumn + wrapText.length * 2, endLineNumber: selection.endLineNumber, endColumn: selection.endColumn + wrapText.length * 2 })
     }
     this.instance.focus()
@@ -168,8 +173,6 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
   }
   formatDivider() {
     let selection = this.instance.getSelection().clone()
-    console.log(selection.startColumn)
-    console.log(selection.endLineNumber)
     if (selection.startColumn !== 1) {
       this.instance.executeEdits(`${this.editorBarPrefix}divider`, [{ range: new monaco.Range(selection.endLineNumber, selection.endColumn, selection.endLineNumber, selection.endColumn), text: '\n\n---  \n' }])
       this.instance.setSelection(monaco.Selection.createWithDirection(selection.startLineNumber + 3, 1, selection.endLineNumber + 3, 1, 0))
@@ -180,6 +183,13 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
 
     this.instance.focus()
   }
+  /**
+   * 打开弹窗类的插入
+   *
+   * @author cyia
+   * @date 2019-09-19
+
+   */
   async open(type: string) {
     let res
     switch (type) {
@@ -192,7 +202,7 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
       default:
         break;
     }
-    console.log(res)
+    // console.log(res)
     res && this.insert(res)
   }
   insert(value: string) {
@@ -202,6 +212,12 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
     this.instance.focus()
   }
 
+  /**
+   * 保存按钮
+   *
+   * @author cyia
+   * @date 2019-09-19
+   */
   save() {
     this.notifyValueChange(this.instance.getValue())
     this.snackBar.open('保存成功', undefined, { duration: 2000 })
@@ -214,19 +230,33 @@ export class CyiaMarkdownComponent implements ControlValueAccessor {
   initRead() {
     this.readValue = this.domSanitizer.bypassSecurityTrustHtml(md({ html: true }).render(this.tempValue))
   }
+
+  /**
+   * 写入时初始化渲染
+   *
+   * @author cyia
+   * @date 2019-09-19
+   */
   initWrite() {
     this.instance = this.instance || monaco.editor.create(this.container.nativeElement, {
       language: 'markdown',
       minimap: { enabled: false },
-      // automaticLayout: true
+      automaticLayout: true
     })
   }
+  /**
+   * 切换读写
+   *
+   * @author cyia
+   * @date 2019-09-19
+   */
   switchPattern() {
-    this.disabled = !this.disabled;
+    this.pattern = this.pattern == Pattern.w ? Pattern.r : Pattern.w;
+    // this.disabled = !this.disabled;
     this.tempValue = this.instance.getValue()
-    if (this.disabled) {
+    if (this.pattern == Pattern.r) {
       this.initRead()
-    } else {
+    } else if (this.pattern == Pattern.w) {
       this.initWrite()
     }
     this.cd.markForCheck()

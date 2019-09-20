@@ -98,6 +98,7 @@ export class _CyiaFormControl<T = any>{
      * autocomplete使用 */
     filterPipe?: (arg0: this, value) => Promise<CyiaOption<T>[]>
     valueChange?: (arg0: this, formControl: FormControl, value) => Promise<CyiaFormControlChange[]>
+    height?: number | string
 }
 export class CyiaFormControl<T = any> extends _CyiaFormControl {
     change$: Subject<CyiaFormControlChange>
