@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, ValidationErrors } from '@angular/forms';
 import { CyiaFormControl } from '../../form/cyia-form.class';
 import { CyiaFormControlFlag } from '../../type/form-control.type';
@@ -27,6 +27,17 @@ import { CyiaFormGroupService } from '../cyia-form-group/cyia-form-group.service
   }
 })
 export class CyiaFormControlComponent implements OnInit {
+  @ViewChild('pickerTemplate', { static: false }) set picker(val) {
+    this._picker = val
+    if (val) {
+      this.cd.markForCheck()
+      // this.cd.detectChanges()
+    }
+  }
+  get picker() {
+    return this._picker
+  }
+  _picker
   @Input() service: CyiaFormGroupService
 
   /**
@@ -95,6 +106,7 @@ export class CyiaFormControlComponent implements OnInit {
       cyiaFormControl.inputPipe ? cyiaFormControl.inputPipe(cyiaFormControl, cyiaFormControl.value) : cyiaFormControl.value,
       cyiaFormControl.validator)
     this.formControl.valueChanges.subscribe(async (val) => {
+      // console.log('值变更', val);
       //doc 错误提示
       this.errors = this.setErrorHint(this.formControl.errors)
       this.nowError = Object.values(this.errors)[0] as string
@@ -117,6 +129,7 @@ export class CyiaFormControlComponent implements OnInit {
           this.service.event$.next(item)
         })
       })
+      // console.log(val);
       cyiaFormControl.value = val
     })
   }
@@ -180,7 +193,12 @@ export class CyiaFormControlComponent implements OnInit {
     this.oldValue = cyiaFormControl.inputPipe ? cyiaFormControl.inputPipe(cyiaFormControl, cyiaFormControl.value) : cyiaFormControl.value
   }
   formFieldChange(cyiaFormControl: CyiaFormControl) {
-    this.flag.formField = cyiaFormControl.type == FormControlType.input || cyiaFormControl.type == FormControlType.select || cyiaFormControl.type == FormControlType.autocomplete
+    this.flag.formField = cyiaFormControl.type == FormControlType.input ||
+      cyiaFormControl.type == FormControlType.select ||
+      cyiaFormControl.type == FormControlType.autocomplete ||
+      cyiaFormControl.type == FormControlType.datepicker
+    // debugger
+    console.log(cyiaFormControl.type, this.flag.formField);
   }
   async optionsChange(cyiaFormControl: CyiaFormControl) {
     this.options = []
@@ -221,6 +239,7 @@ export class CyiaFormControlComponent implements OnInit {
     await this.readValueChange(cyiaFormControl)
     await this.oldValueChange(cyiaFormControl)
     await this.formFieldChange(cyiaFormControl)
+    this.cd.markForCheck()
   }
   changeSubscribe(cyiaFormControl: CyiaFormControl) {
     cyiaFormControl.change$

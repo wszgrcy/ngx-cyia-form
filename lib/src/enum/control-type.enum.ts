@@ -8,5 +8,6 @@ export enum FormControlType {
     slider = 'slider',
     slideToggle = 'slide-toggle',
     autocomplete = 'autocomplete',
-    markdown = 'markdown'
+    markdown = 'markdown',
+    datepicker = 'datepicker',
 }

@@ -1,3 +1,4 @@
+<mat-datepicker #pickerTemplate *ngIf="cyiaFormControl.type=='datepicker'"></mat-datepicker>
 <ng-template #optionsTemplate let-option>
   <ng-container *ngIf="!cyiaFormControl.optionTemplate">
     {{option.label}}
@@ -51,8 +52,15 @@
               </mat-option>
             </mat-autocomplete>
           </ng-container>
-
+          <ng-container *ngSwitchCase="'datepicker'">
+            <cyia-datepicker [formControl]="formControl" [matDatepicker]="picker" #cyiadate
+              [placeholder]="cyiaFormControl.placeholder"></cyia-datepicker>
+            <!-- <input matInput [matDatepicker]="picker" [placeholder]="cyiaFormControl.placeholder"
+              [formControl]="formControl"> -->
+          </ng-container>
         </ng-container>
+        <mat-datepicker-toggle matSuffix [for]="picker" *ngIf="picker"></mat-datepicker-toggle>
+
         <mat-error *ngIf="nowError&&cyiaFormControl.displayError">{{nowError}}</mat-error>
       </mat-form-field>
     </ng-template>

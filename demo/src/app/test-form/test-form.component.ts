@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { CyiaFormControl, Pattern, FormControlType, CyiaFormGroup } from 'cyia-ngx-form';
+import { CyiaFormControl, Pattern, FormControlType, CyiaFormGroup, formPropertyType } from 'cyia-ngx-form';
 import { Validators } from '@angular/forms';
 // import { FormControlType } from 'lib/src/enum/control-type.enum';
 import { importScript } from "cyia-ngx-common";
@@ -115,7 +115,15 @@ export class TestFormComponent implements OnInit {
       pattern: Pattern.w,
       height: 200
     })
-    this.g1.controls.push(md)
+    let dp = new CyiaFormControl({
+      type: FormControlType.datepicker,
+      pattern: Pattern.w,
+      label: '日期',
+      value: new Date().getTime()
+    })
+    // this.g1.controls.push(md)
+
+    this.g1.controls.push(dp)
     let g2 = new CyiaFormGroup()
     g2.key = '111'
     g2.controls.push(this.control)
